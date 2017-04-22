@@ -1,0 +1,15 @@
+{
+  "name": "RapidLabeling",
+  "homepage": "https://github.com/SSUHan/RapidLabeling",
+  "authors": [
+    "SW 7th RapidCheck team"
+  ],
+  "description": "RapidCheck Labeling tool",
+  "main": "index.html",
+  "keywords": [
+    "RapidCheck",
+    "Labeling"
+  ],
+  "license": "RapidCheck",
+  "private": true
+}
