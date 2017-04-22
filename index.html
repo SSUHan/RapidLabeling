@@ -8,21 +8,29 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
         <!-- Optional theme -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
-<!--        <script type="text/javascript" src="http://annotorious.github.com/latest/annotorious.min.js"/> -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"/> 
+        <script type="text/javascript" src="http://annotorious.github.com/latest/annotorious.min.js"/>
+
     </head>
-    <body onload="init();">s
+    <body onload="init();">
+        <script>
+        function init() {
+            anno.makeAnnotatable(document.getElementById('myImage'));
+        }
+        </script>
         <div class="container">
-            <script>
-                function init() {
-                    anno.makeAnnotatable(document.getElementById('myImage'));
-                }
-            </script>
             <div class="row">
                 <div class="col-md-12"><h1>RapidCheck Labeling Sites!</h1></div>
             </div>
             <div class="row">
-                <div class="col-md-3">여기는 Labeling Pre List 가 들어갈 위치</div>
+                <div class="col-md-3">
+                    <h4>Choose label</h4>
+                    <div class="radio">
+                        <label><input type="radio" name="label" value="car" checked>car</label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" name="label" value="person">person</label>
+                    </div>
+                </div>
                 <div class="col-md-9">
                     <img src="person.jpg" id="target_image" class="annotatable"/>
                     <button class="btn btn-default" type="submit" id="save_btn" data-loading-text="Loading...">Save</button>
@@ -34,16 +42,10 @@
                     </div>
                 </div>
             </div>
-        
         </div>
     </body>
-    <script>
-                            $('#save_btn').on('click', function () {
-                                var $btn = $(this).button('loading')
-                                // business logic...
-                                document.getElementById('my_console').innerHTML = 'hello world';
-                                
-                                $btn.button('reset')
-                            })
-                        </script>
+
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+
 </html>

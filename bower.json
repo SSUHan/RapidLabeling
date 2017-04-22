@@ -11,5 +11,8 @@
     "Labeling"
   ],
   "license": "RapidCheck",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "jquery": "^3.2.1"
+  }
 }
