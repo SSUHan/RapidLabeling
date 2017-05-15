@@ -9,24 +9,31 @@ function gdToObject(gd) {
     res.class = gd.text;
     return res;
 }
-function jsonToXml(json) {
-    var doc = jQuery.parseXML("<annotation/>")
-    var xml = doc.getElementsByTagName("annotation")[0]
-    var key, elem
 
-    for (key in json) {
-        if (json.hasOwnProperty(key)) {
-            elem = doc.createElement(key)
-            jQuery(elem).text(jsonToXml(json[key]))
-            xml.appendChild(elem)
-        }
+function jsonToXmlString(json) {
+    var xml = "";
+    for (var key in json) {
+        if (!json.hasOwnProperty(key))
+            continue;
+        xml += "<" + key + ">";
+        if (typeof json[key] == "object")
+            xml += jsonToXmlString(new Object(json[key]));
+        else
+            xml += json[key];
+        xml += "</" + key + ">";
     }
-    console.log(xml.outerHTML)
-    return xml
+    return xml;
 }
 
+function jsonToXml (json) {
+    var doc = jQuery.parseXML("<annotation>" + jsonToXmlString(json) + "</annotation>");
+    var xml = doc.getElementsByTagName("annotation")[0];
+    return xml;
+}
+
+
 jQuery(document).ready(function ($) {
-    
+
     function onSave () {
         $('#result').empty();
         var annos = anno.getAnnotations();
@@ -42,21 +49,21 @@ jQuery(document).ready(function ($) {
         retXml = jsonToXml(body);
         console.log("retXml", retXml)
     }
-    
+
     function onReset(){
         $('#result').empty();
         $('<p>').text('Clear...').appendTo($('#result'));
     }
-    
+
     $('#save_btn').on('click', onSave);
     $('#rest_btn').on('click', onReset);
-    
+
     $(document).on('mouseup', function () {
         $('.annotorious-editor-text').val($("input:radio[name=label]:checked").val());
     });
 
     $(document).keypress(function(e){
-        
+
         if (e.keyCode == 49) {
             // onPress button 1
             $('input:radio[name=label][value=person]').attr('checked', false);
