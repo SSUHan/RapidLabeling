@@ -1,6 +1,6 @@
 jQuery.noConflict();
 
-function gdToJson(gd) {
+function gdToObject(gd) {
     var res = {};
     var geo = gd.shapes[0].geometry;
     for (var prop in geo) {
@@ -10,32 +10,47 @@ function gdToJson(gd) {
     return res;
 }
 function jsonToXml(json) {
-    var doc = jQuery.parseXML("<xml/>")
-    var xml = doc.getElementsByTagName("xml")[0]
+    var doc = jQuery.parseXML("<annotation/>")
+    var xml = doc.getElementsByTagName("annotation")[0]
     var key, elem
 
     for (key in json) {
         if (json.hasOwnProperty(key)) {
             elem = doc.createElement(key)
-            jQuery(elem).text(json[key])
+            jQuery(elem).text(jsonToXml(json[key]))
             xml.appendChild(elem)
         }
     }
-
     console.log(xml.outerHTML)
+    return xml
 }
+
 jQuery(document).ready(function ($) {
+    
     function onSave () {
         $('#result').empty();
         var annos = anno.getAnnotations();
+        var body = {};
+        body['filename'] = '00001.jpg';
+        body['object'] = [];
         for (var i=0; i<annos.length; i++) {
-            var res = gdToJson(annos[i]);
+            var res = gdToObject(annos[i]);
+            console.log("res from json", res)
             $('<p>').text(JSON.stringify(res)).appendTo($('#result'));
-            jsonToXml(res);
+            body['object'].push(res)
         }
+        retXml = jsonToXml(body);
+        console.log("retXml", retXml)
     }
+    
+    function onReset(){
+        $('#result').empty();
+        $('<p>').text('Clear...').appendTo($('#result'));
+    }
+    
     $('#save_btn').on('click', onSave);
-
+    $('#rest_btn').on('click', onReset);
+    
     $(document).on('mouseup', function () {
         $('.annotorious-editor-text').val($("input:radio[name=label]:checked").val());
     });
@@ -53,6 +68,9 @@ jQuery(document).ready(function ($) {
         } else if (e.keyCode == 51) {
             // onPress button 3
             onSave();
+        } else if (E.keyCode == 52){
+            // onPress button 4
+            onReset();
         }
     });
 });
