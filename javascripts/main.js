@@ -15,15 +15,25 @@ function jsonToXmlString(json) {
     for (var key in json) {
         if (!json.hasOwnProperty(key))
             continue;
-        xml += "<" + key + ">";
-        if (typeof json[key] == "object")
+        if (Array.isArray(json[key])) {
+            for (var i=0; i<json[key].length; i++) {
+                xml += "<" + key + ">";
+                xml += jsonToXmlString(json[key][i]);
+                xml += "</" + key + ">";
+            }
+            return xml;
+        }
+
+       xml += "<" + key + ">";
+       if (typeof json[key] == "object")
             xml += jsonToXmlString(new Object(json[key]));
-        else
+       else
             xml += json[key];
         xml += "</" + key + ">";
     }
     return xml;
 }
+
 
 function jsonToXml (json) {
     var doc = jQuery.parseXML("<annotation>" + jsonToXmlString(json) + "</annotation>");
@@ -56,7 +66,7 @@ jQuery(document).ready(function ($) {
     }
 
     $('#save_btn').on('click', onSave);
-    $('#rest_btn').on('click', onReset);
+    $('#reset_btn').on('click', onReset);
 
     $(document).on('mouseup', function () {
         $('.annotorious-editor-text').val($("input:radio[name=label]:checked").val());
