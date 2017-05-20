@@ -1,1 +1,1 @@
-__all__ = ['index']
+__all__ = ['index', 'image_load']

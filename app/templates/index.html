@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+{% block body %}
+<body onload="init();">
+    <script>
+    function init() {
+        anno.makeAnnotatable(document.getElementById('myImage'));
+    }
+    </script>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12"><h1>RapidCheck Labeling Sites!</h1></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <h4>Choose label</h4>
+                <div class="radio">
+                    <label><input type="radio" name="label" value="car" checked>car</label>
+                </div>
+                <div class="radio">
+                    <label><input type="radio" name="label" value="person">person</label>
+                </div>
+                <div class="radio">
+                    <label><input type="radio" name="label" value="custom">custom</label>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <img src="{{ image_path }}" id="target_image" class="annotatable"/>
+                <button class="btn btn-default" type="submit" id="save_btn" data-loading-text="Loading...">Save</button>
+                <button class="btn btn-default" type="submit" id='reset_btn'>Reset</button>
+                <button class="btn btn-default" type="submit" id='next_btn'>Next</button>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div id="result">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}
