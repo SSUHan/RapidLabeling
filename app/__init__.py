@@ -1,8 +1,14 @@
 from flask import Flask
-print("2", __name__)
+
 
 rc_app = Flask(__name__)
-# print(rc_app.root_path)
+
 rc_app.secret_key = 'mysecret'
+
+# DataControllor in Global Modules..
+from app.models.data_center import DataControllor
+
+dc = DataControllor()
+dc.load_config()
 
 from app.routes import *

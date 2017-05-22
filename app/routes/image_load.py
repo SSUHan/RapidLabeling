@@ -1,4 +1,4 @@
-from app import rc_app
+from app import rc_app, dc
 from flask import jsonify, json, request, url_for
 import os
 
@@ -10,12 +10,13 @@ def next_image():
 	print("next image function called ")
 	to_client = {}
 	to_client['image_name'] = '00001.jpg'
-	infomation_file = os.path.join(rc_app.root_path, "static", "datacenter", "datacenter_infomation.json")
+	# infomation_file = os.path.join(rc_app.root_path, "static", "datacenter", "datacenter_infomation.json")
 	# load infomation json file from datacenter
 	# type(infomation_json) : dict
-	infomation_json = json.load(open(infomation_file))
-	return jsonify(infomation_json)
-	# return '../datacenter/images/dog.jpg'
+	# infomation_json = json.load(open(infomation_file))
+	dc.print_status()
+	return "hello"
+	
 
 
 @rc_app.route('/datacenter/<name>')
