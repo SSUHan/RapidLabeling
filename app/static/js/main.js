@@ -45,15 +45,23 @@ function jsonToXml(json) {
 jQuery(document).ready(function ($) {
     var imgDir = "http://127.0.0.1:5000/static/datacenter/images/";
     window.body = {};
-    
+    var targetImg = $('#target_image');
+
     function onSave() {
         $('#result').empty();
         var annos = anno.getAnnotations();
         window.body = {}; // This body would be sent to Server
         body['filename'] = '00001.jpg';
         body['object'] = [];
+        // set image size
+        var width = $('#target_image').width(), height = $('#target_image').height();
+        $('<p>').text("width:"+width+", height:"+height).appendTo($('#result'));
         for (var i = 0; i < annos.length; i++) {
             var res = gdToObject(annos[i]);
+            res.x *= width;
+            res.y *= height;
+            res.width *= width;
+            res.height *= height;
             console.log("res from json", res)
             $('<p>').text(JSON.stringify(res)).appendTo($('#result'));
             body['object'].push(res)
@@ -82,7 +90,7 @@ jQuery(document).ready(function ($) {
                 key2: "value2"
             }, function (data, status) {
                 data.filename = "person.jpg"; // TODO on the server side
-                vody.filename = data.filename;
+                body.filename = data.filename;
                 $("#target_image").attr("src",imgDir + data.filename);
             });
     }
