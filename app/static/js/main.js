@@ -16,7 +16,7 @@ function jsonToXmlString(json) {
         if (!json.hasOwnProperty(key))
             continue;
         if (Array.isArray(json[key])) {
-            for (var i=0; i<json[key].length; i++) {
+            for (var i = 0; i < json[key].length; i++) {
                 xml += "<" + key + ">";
                 xml += jsonToXmlString(json[key][i]);
                 xml += "</" + key + ">";
@@ -24,10 +24,10 @@ function jsonToXmlString(json) {
             return xml;
         }
 
-       xml += "<" + key + ">";
-       if (typeof json[key] == "object")
+        xml += "<" + key + ">";
+        if (typeof json[key] == "object")
             xml += jsonToXmlString(new Object(json[key]));
-       else
+        else
             xml += json[key];
         xml += "</" + key + ">";
     }
@@ -35,7 +35,7 @@ function jsonToXmlString(json) {
 }
 
 
-function jsonToXml (json) {
+function jsonToXml(json) {
     var doc = jQuery.parseXML("<annotation>" + jsonToXmlString(json) + "</annotation>");
     var xml = doc.getElementsByTagName("annotation")[0];
     return xml;
@@ -43,14 +43,16 @@ function jsonToXml (json) {
 
 
 jQuery(document).ready(function ($) {
-
-    function onSave () {
+    var imgDir = "http://127.0.0.1:5000/static/datacenter/images/";
+    window.body = {};
+    
+    function onSave() {
         $('#result').empty();
         var annos = anno.getAnnotations();
-        window.body = {}; // This body would be sented to Sever 
+        window.body = {}; // This body would be sent to Server
         body['filename'] = '00001.jpg';
         body['object'] = [];
-        for (var i=0; i<annos.length; i++) {
+        for (var i = 0; i < annos.length; i++) {
             var res = gdToObject(annos[i]);
             console.log("res from json", res)
             $('<p>').text(JSON.stringify(res)).appendTo($('#result'));
@@ -61,37 +63,39 @@ jQuery(document).ready(function ($) {
         body['xml_data'] = retXml;
     }
 
-    function onReSet(){
+    function onReSet() {
         $('#result').empty();
         $('<p>').text('Clear...').appendTo($('#result'));
+        anno.reset();
     }
 
-    function onNext(){
+    // add image load event
+    $('#target_image').on('load', function () {
+        onReSet();
+    });
+
+    function onNext() {
         console.log('this is onNext..');
-        $.post('http://127.0.0.1:5000/next_image', 
-        {
-            key1:"value1",
-            key2:"value2"
-        }, function(data, status){
-            // new image url example : http://127.0.0.1:5000/static/datacenter/images/dog.jpg
-            console.log("data from post : ", data);
-            console.log("status from post : ", status);
-        });
-        // $.get("http://127.0.0.1:5000/next_image", function(data, status){
-        //     console.log("data from server : ", data)
-        //     console.log('status from server : ', status)
-        // });
+        $.post('http://127.0.0.1:5000/next_image',
+            {
+                key1: "value1",
+                key2: "value2"
+            }, function (data, status) {
+                data.filename = "person.jpg"; // TODO on the server side
+                vody.filename = data.filename;
+                $("#target_image").attr("src",imgDir + data.filename);
+            });
     }
 
     $('#save_btn').on('click', onSave);
     $('#reset_btn').on('click', onReSet);
     $('#next_btn').on('click', onNext);
-    
+
     $(document).on('mouseup', function () {
         $('.annotorious-editor-text').val($("input:radio[name=label]:checked").val());
     });
 
-    $(document).keypress(function(e){
+    $(document).keypress(function (e) {
 
         if (e.keyCode == 49) {
             // onPress button 1
@@ -104,7 +108,7 @@ jQuery(document).ready(function ($) {
         } else if (e.keyCode == 51) {
             // onPress button 3
             onSave();
-        } else if (E.keyCode == 52){
+        } else if (E.keyCode == 52) {
             // onPress button 4
             onReSet();
         }
