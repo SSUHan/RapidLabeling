@@ -1,4 +1,4 @@
-jQuery.noConflict();
+$.noConflict();
 
 function gdToObject(gd) {
     var res = {};
@@ -47,7 +47,7 @@ jQuery(document).ready(function ($) {
     function onSave () {
         $('#result').empty();
         var annos = anno.getAnnotations();
-        var body = {};
+        window.body = {}; // This body would be sented to Sever 
         body['filename'] = '00001.jpg';
         body['object'] = [];
         for (var i=0; i<annos.length; i++) {
@@ -57,17 +57,35 @@ jQuery(document).ready(function ($) {
             body['object'].push(res)
         }
         retXml = jsonToXml(body);
-        console.log("retXml", retXml)
+        console.log("retXml", retXml);
+        body['xml_data'] = retXml;
     }
 
-    function onReset(){
+    function onReSet(){
         $('#result').empty();
         $('<p>').text('Clear...').appendTo($('#result'));
     }
 
-    $('#save_btn').on('click', onSave);
-    $('#reset_btn').on('click', onReset);
+    function onNext(){
+        console.log('this is onNext..');
+        $.post('http://127.0.0.1:5000/next_image', 
+        {
+            key1:"value1",
+            key2:"value2"
+        }, function(data, status){
+            console.log("data from post : ", data);
+            console.log("status from post : ", status)
+        });
+        // $.get("http://127.0.0.1:5000/next_image", function(data, status){
+        //     console.log("data from server : ", data)
+        //     console.log('status from server : ', status)
+        // });
+    }
 
+    $('#save_btn').on('click', onSave);
+    $('#reset_btn').on('click', onReSet);
+    $('#next_btn').on('click', onNext);
+    
     $(document).on('mouseup', function () {
         $('.annotorious-editor-text').val($("input:radio[name=label]:checked").val());
     });
@@ -87,7 +105,7 @@ jQuery(document).ready(function ($) {
             onSave();
         } else if (E.keyCode == 52){
             // onPress button 4
-            onReset();
+            onReSet();
         }
     });
 });
