@@ -73,8 +73,9 @@ jQuery(document).ready(function ($) {
             key1:"value1",
             key2:"value2"
         }, function(data, status){
+            // new image url example : http://127.0.0.1:5000/static/datacenter/images/dog.jpg
             console.log("data from post : ", data);
-            console.log("status from post : ", status)
+            console.log("status from post : ", status);
         });
         // $.get("http://127.0.0.1:5000/next_image", function(data, status){
         //     console.log("data from server : ", data)
