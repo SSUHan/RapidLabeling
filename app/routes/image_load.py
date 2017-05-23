@@ -7,13 +7,14 @@ def next_image():
 	from_client = request.form
 	print("request", type(request), request)
 	print(from_client['file_name'])
-	# print(from_client['xml_data'])
-	# print(from_client['key1'])
+	print(from_client['xml_data'])
+	
 	print("next image function called ")
 	to_client = {}
 	# TODO : Get new image from DataControllor
 	if dc.built:
 		print("is built is True..")
+		dc.save_annotation(from_client['file_name'], from_client['xml_data'])
 		to_client['new_image_name'] = dc.next_image_path()
 
 	print(to_client)

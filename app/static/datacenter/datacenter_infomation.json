@@ -4,6 +4,9 @@
 	"provider_name":"Junsu Lee",
 	"project_name":"RapidCheck",
 	"project_category":"Labeling Image Data",
+	"images_folder_path":"static/datacenter/images",
+	"annotations_folder_path":"static/datacenter/annotations",
 	"total_image_number":4,
-	"current_image_number":0
+	"current_image_number":0,
+	"last_update_time":"2017-05-23"
 }

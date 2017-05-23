@@ -47,11 +47,12 @@ jQuery(document).ready(function ($) {
     window.body = {};
     var targetImg = $('#target_image');
 
+    body['file_name'] = '00001.jpg'; // TODO : get from server dynamically
+
     function onSave() {
         $('#result').empty();
         var annos = anno.getAnnotations();
-        window.body = {}; // This body would be sent to Server
-        body['file_name'] = '00001.jpg';
+        
         body['object'] = [];
         // set image size
         var width = $('#target_image').width(), height = $('#target_image').height();
@@ -84,14 +85,13 @@ jQuery(document).ready(function ($) {
 
     function onNext() {
         console.log('this is onNext..');
+        console.log("body", body)
         $.post('http://127.0.0.1:5000/next_image',
             {
-                //file_name: window.body['file_name'],
-                //xml_data: window.body['xml_data']
-                file_name:body.file_name,
-                "key2":"value2"
+                file_name: body.file_name,
+                xml_data: body.xml_data.outerHTML
             }, function (data, status) {
-                body.file_name = data.new_image_name;
+                body['file_name'] = data.new_image_name;
                 $("#target_image").attr("src",imgDir + body.file_name);
             });
     }

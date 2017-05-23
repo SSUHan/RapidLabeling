@@ -8,6 +8,7 @@ class DataControllor:
 	connector = 0 # Connector in this Server
 	total_image_number = 0
 	current_image_number = 0
+	annotations_folder_path = None
 	label_path_list = []
 	built = False
 	
@@ -15,6 +16,7 @@ class DataControllor:
 		self.connector = 0
 		self.total_image_number = 0
 		self.current_image_number = 0
+		self.annotations_folder_path = None
 
 	def load_config(self):
 		# infomation_file = url_for('static', filename='datacenter/datacenter_infomation.json')
@@ -25,7 +27,7 @@ class DataControllor:
 			infomation_json = json.load(f)
 		self.total_image_number = infomation_json['total_image_number']
 		self.current_image_number = infomation_json['current_image_number']
-		# images_folder = "/static/datacenter/images/"
+		self.annotations_folder_path = os.path.join(rc_app.root_path, infomation_json['annotations_folder_path'])
 		for each_path in glob.glob(os.path.join(rc_app.root_path, "static", "datacenter", "images", "*")):
 			each_name = each_path.split('/')[-1]
 			self.label_path_list.append(each_name)
@@ -37,6 +39,13 @@ class DataControllor:
 		self.connector += 1
 		pass
 
+	def save_annotation(self, file_name, xml_data):
+		xml_file_name = file_name.split('.')[0] +'.xml'
+		print(xml_file_name)
+		with open(os.path.join(self.annotations_folder_path, xml_file_name), 'w+') as f:
+			f.write(xml_data)
+			print("write something")
+
 	def next_image_path(self):
 		self.current_image_number += 1
 		if self.built is not True:
@@ -47,6 +56,15 @@ class DataControllor:
 
 	def print_status(self):
 		print("*"*40)
-		print("\tCurrent Connector : {}\n\tTotal Image Number : {}\n\tCurrent Image Number : {}\n\tBuilt : {}".format(self.connector, self.total_image_number, self.current_image_number, self.built))
+		print("\tCurrent Connector : {}\n\
+			\tTotal Image Number : {}\n\
+			\tCurrent Image Number : {}\n\
+			\tBuilt : {}\n\
+			\tAnnotations Folder path : {}"\
+			.format(self.connector, 
+				self.total_image_number, 
+				self.current_image_number, 
+				self.built,
+				self.annotations_folder_path))
 		print("\tlabel_path_list : ", self.label_path_list)
 		print("*"*40)
