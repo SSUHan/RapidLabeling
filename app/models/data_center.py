@@ -47,12 +47,13 @@ class DataControllor:
 			print("write something")
 
 	def next_image_path(self):
-		self.current_image_number += 1
 		if self.built is not True:
 			return False
 		if self.total_image_number <= self.current_image_number:
 			return False
-		return self.label_path_list[self.current_image_number]
+		ret = self.label_path_list[self.current_image_number]
+		self.current_image_number += 1
+		return ret
 
 	def print_status(self):
 		print("*"*40)

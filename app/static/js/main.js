@@ -91,7 +91,7 @@ jQuery(document).ready(function ($) {
                 file_name: body.file_name,
                 xml_data: body.xml_data.outerHTML
             }, function (data, status) {
-                body['file_name'] = data.new_image_name;
+                body['file_name'] = data.new_file_name;
                 $("#target_image").attr("src",imgDir + body.file_name);
             });
     }

@@ -2,6 +2,13 @@ from app import rc_app, dc
 from flask import jsonify, json, request, url_for
 import os
 
+@rc_app.route('/start_labeling', methods=["GET"])
+def start_labeling():
+	to_client = {}
+	to_client['new_file_name'] = dc.next_image_path()
+	dc.print_status()
+	return jsonify(to_client)
+
 @rc_app.route('/next_image', methods=['GET', 'POST'])
 def next_image():
 	from_client = request.form
@@ -15,7 +22,7 @@ def next_image():
 	if dc.built:
 		print("is built is True..")
 		dc.save_annotation(from_client['file_name'], from_client['xml_data'])
-		to_client['new_image_name'] = dc.next_image_path()
+		to_client['new_file_name'] = dc.next_image_path()
 
 	print(to_client)
 	# infomation_file = os.path.join(rc_app.root_path, "static", "datacenter", "datacenter_infomation.json")
