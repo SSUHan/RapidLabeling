@@ -6,16 +6,23 @@ import os
 def next_image():
 	from_client = request.form
 	print("request", type(request), request)
-	print("from client json : ", type(from_client), from_client['key1'])
+	print(from_client['file_name'])
+	# print(from_client['xml_data'])
+	# print(from_client['key1'])
 	print("next image function called ")
 	to_client = {}
-	to_client['image_name'] = '00001.jpg'
+	# TODO : Get new image from DataControllor
+	if dc.built:
+		print("is built is True..")
+		to_client['new_image_name'] = dc.next_image_path()
+
+	print(to_client)
 	# infomation_file = os.path.join(rc_app.root_path, "static", "datacenter", "datacenter_infomation.json")
 	# load infomation json file from datacenter
 	# type(infomation_json) : dict
 	# infomation_json = json.load(open(infomation_file))
 	dc.print_status()
-	return "hello"
+	return jsonify(to_client)
 	
 
 
