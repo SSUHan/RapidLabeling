@@ -11,6 +11,7 @@ class DataControllor:
 	current_image_number = 0
 	annotations_folder_path = None
 	label_path_list = []
+	skip_step = 0
 	built = False
 	
 	def __init__(self):
@@ -18,6 +19,7 @@ class DataControllor:
 		self.total_image_number = 0
 		self.current_image_number = 0
 		self.annotations_folder_path = None
+		self.skip_step = 0
 
 	def load_config(self):
 		# infomation_file = url_for('static', filename='datacenter/datacenter_infomation.json')
@@ -26,12 +28,14 @@ class DataControllor:
 		infomation_file = os.path.join(rc_app.root_path, "static", "datacenter", "datacenter_infomation.json")
 		with open(infomation_file) as f:
 			infomation_json = json.load(f)
-		self.total_image_number = infomation_json['total_image_number']
 		self.current_image_number = infomation_json['current_image_number']
+		self.skip_step = infomation_json['skip_step']
 		self.annotations_folder_path = os.path.join(rc_app.root_path, infomation_json['annotations_folder_path'])
 		for each_path in glob.glob(os.path.join(rc_app.root_path, "static", "datacenter", "images", "*")):
 			each_name = each_path.split(sep)[-1]
 			self.label_path_list.append(each_name)
+
+		self.total_image_number = len(self.label_path_list)
 		
 		self.built = True
 		self.print_status()
@@ -46,7 +50,7 @@ class DataControllor:
 		with open(os.path.join(self.annotations_folder_path, xml_file_name), 'w+') as f:
 			f.write(xml_data)
 		
-		self.current_image_number += 1
+		self.current_image_number += self.skip_step
 		print("write something")
 
 	def next_image_path(self):
@@ -69,5 +73,5 @@ class DataControllor:
 				self.current_image_number, 
 				self.built,
 				self.annotations_folder_path))
-		print("\tlabel_path_list : ", self.label_path_list)
+		# print("\tlabel_path_list : ", self.label_path_list)
 		print("*"*40)
