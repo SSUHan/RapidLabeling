@@ -44,7 +44,9 @@ class DataControllor:
 		print(xml_file_name)
 		with open(os.path.join(self.annotations_folder_path, xml_file_name), 'w+') as f:
 			f.write(xml_data)
-			print("write something")
+		
+		self.current_image_number += 1
+		print("write something")
 
 	def next_image_path(self):
 		if self.built is not True:
@@ -52,7 +54,6 @@ class DataControllor:
 		if self.total_image_number <= self.current_image_number:
 			return False
 		ret = self.label_path_list[self.current_image_number]
-		self.current_image_number += 1
 		return ret
 
 	def print_status(self):
