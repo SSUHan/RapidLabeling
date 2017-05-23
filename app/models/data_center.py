@@ -3,6 +3,7 @@ import json
 import os
 import glob
 from flask import url_for
+from os import sep
 
 class DataControllor:
 	connector = 0 # Connector in this Server
@@ -29,7 +30,7 @@ class DataControllor:
 		self.current_image_number = infomation_json['current_image_number']
 		self.annotations_folder_path = os.path.join(rc_app.root_path, infomation_json['annotations_folder_path'])
 		for each_path in glob.glob(os.path.join(rc_app.root_path, "static", "datacenter", "images", "*")):
-			each_name = each_path.split('/')[-1]
+			each_name = each_path.split(sep)[-1]
 			self.label_path_list.append(each_name)
 		
 		self.built = True

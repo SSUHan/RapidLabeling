@@ -43,9 +43,9 @@ function jsonToXml(json) {
 
 
 jQuery(document).ready(function ($) {
-    var imgDir = "http://127.0.0.1:5000/static/datacenter/images/";
+    var imgDir = "/static/datacenter/images/";
     window.body = {};
-    $.get('http://127.0.0.1:5000/start_labeling',
+    $.get('/start_labeling',
         function (data) {
             body['file_name'] = data.new_file_name;
             $("#target_image").attr("src",imgDir + body.file_name);
@@ -91,7 +91,7 @@ jQuery(document).ready(function ($) {
     function onNext() {
         console.log('this is onNext..');
         console.log("body", body)
-        $.post('http://127.0.0.1:5000/next_image',
+        $.post('/next_image',
             {
                 file_name: body.file_name,
                 xml_data: body.xml_data.outerHTML
