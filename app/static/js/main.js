@@ -45,7 +45,12 @@ function jsonToXml(json) {
 jQuery(document).ready(function ($) {
     var imgDir = "http://127.0.0.1:5000/static/datacenter/images/";
     window.body = {};
-    var targetImg = $('#target_image');
+    $.get('http://127.0.0.1:5000/start_labeling',
+        function (data) {
+            body['file_name'] = data.new_file_name;
+            $("#target_image").attr("src",imgDir + body.file_name);
+        });
+
 
     body['file_name'] = '00001.jpg'; // TODO : get from server dynamically
 
@@ -90,7 +95,7 @@ jQuery(document).ready(function ($) {
             {
                 file_name: body.file_name,
                 xml_data: body.xml_data.outerHTML
-            }, function (data, status) {
+            }, function (data) {
                 body['file_name'] = data.new_file_name;
                 $("#target_image").attr("src",imgDir + body.file_name);
             });
