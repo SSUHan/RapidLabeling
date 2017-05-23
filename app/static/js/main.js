@@ -94,7 +94,7 @@ jQuery(document).ready(function ($) {
         $.post('/next_image',
             {
                 file_name: body.file_name,
-                xml_data: body.xml_data.outerHTML
+                xml_data: vkbeautify.xml(body.xml_data.outerHTML)
             }, function (data) {
                 body['file_name'] = data.new_file_name;
                 $("#target_image").attr("src",imgDir + body.file_name);

@@ -2,3 +2,5 @@ __pycache__/
 bower_components/
 venvFlask/
 *.pyc
+images/
+annotations/
