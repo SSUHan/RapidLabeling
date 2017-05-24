@@ -115,6 +115,6 @@ def pascal_voc_clean_xml(ANN, pick, exclusive = False):
 	return dumps
 
 if __name__ == '__main__':
-	classes_name = ["aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train","tvmonitor"]
-	dumps = pascal_voc_clean_xml('.', classes_name)
+	classes_name = ["car", "person"]
+	dumps = pascal_voc_clean_xml(os.path.join('app', 'static', 'datacenter', 'annotations'), classes_name)
 	print(dumps)

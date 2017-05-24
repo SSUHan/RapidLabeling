@@ -48,12 +48,12 @@ jQuery(document).ready(function ($) {
     window.body = {};
     $.get('/start_labeling',
         function (data) {
-            body['file_name'] = data.new_file_name;
-            $("#target_image").attr("src",imgDir + body.file_name);
+            body['filename'] = data.new_file_name;
+            $("#target_image").attr("src",imgDir + body.filename);
         });
 
 
-    body['file_name'] = '00001.jpg'; // TODO : get from server dynamically
+    // body['file_name'] = '00001.jpg'; // TODO : get from server dynamically
 
     function onSave() {
         $('#result').empty();
@@ -76,13 +76,10 @@ jQuery(document).ready(function ($) {
             body['object'].push({"name":res.class, "xmin":xmin, "ymin":ymin, "xmax":xmax, "ymax":ymax});
         }
         
-        // body['size']['width'] = width;
-        // body['size']['height'] = height;
-        // body['size']['depth'] = 3;
-        // console.log("body : ", body);
         retXml = jsonToXml(body);
         console.log("retXml", retXml);
         body['xml_data'] = retXml;
+        onNext();
     }
 
     function onReSet() {
@@ -101,17 +98,17 @@ jQuery(document).ready(function ($) {
         console.log("body", body)
         $.post('/next_image',
             {
-                file_name: body.file_name,
+                file_name: body.filename,
                 xml_data: vkbeautify.xml(body.xml_data.outerHTML)
             }, function (data) {
-                body['file_name'] = data.new_file_name;
-                $("#target_image").attr("src",imgDir + body.file_name);
+                body['filename'] = data.new_file_name;
+                $("#target_image").attr("src",imgDir + body.filename);
             });
     }
 
     $('#save_btn').on('click', onSave);
     $('#reset_btn').on('click', onReSet);
-    $('#next_btn').on('click', onNext);
+    
 
     $(document).on('mouseup', function () {
         $('.annotorious-editor-text').val($("input:radio[name=label]:checked").val());
