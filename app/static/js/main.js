@@ -12,6 +12,7 @@ function gdToObject(gd) {
 
 function jsonToXmlString(json) {
     var xml = "";
+    console.log(json);
     for (var key in json) {
         if (!json.hasOwnProperty(key))
             continue;
@@ -21,21 +22,21 @@ function jsonToXmlString(json) {
                 xml += jsonToXmlString(json[key][i]);
                 xml += "</" + key + ">";
             }
-            return xml;
+        } else {
+            xml += "<" + key + ">";
+            if (typeof json[key] == "object")
+                xml += jsonToXmlString(new Object(json[key]));
+            else
+                xml += json[key];
+            xml += "</" + key + ">"; 
         }
-
-        xml += "<" + key + ">";
-        if (typeof json[key] == "object")
-            xml += jsonToXmlString(new Object(json[key]));
-        else
-            xml += json[key];
-        xml += "</" + key + ">";
     }
     return xml;
 }
 
 
 function jsonToXml(json) {
+    console.log(json);
     var doc = jQuery.parseXML("<annotation>" + jsonToXmlString(json) + "</annotation>");
     var xml = doc.getElementsByTagName("annotation")[0];
     return xml;
@@ -62,16 +63,23 @@ jQuery(document).ready(function ($) {
         // set image size
         var width = $('#target_image').width(), height = $('#target_image').height();
         $('<p>').text("width:"+width+", height:"+height).appendTo($('#result'));
+        body['size'] = {"width":width, "height":height, "depth":3};
+        
         for (var i = 0; i < annos.length; i++) {
             var res = gdToObject(annos[i]);
-            res.x *= width;
-            res.y *= height;
-            res.width *= width;
-            res.height *= height;
+            var xmin = res.x*width;
+            var ymin = res.y*height;
+            var xmax = xmin + res.width*width;
+            var ymax = ymin + res.height*height;
             console.log("res from json", res)
-            $('<p>').text(JSON.stringify(res)).appendTo($('#result'));
-            body['object'].push(res)
+            $('<p>').text(JSON.stringify({"xmin":xmin, "ymin":ymin, "xmax":xmax, "ymax":ymax, "name":res.class})).appendTo($('#result'));
+            body['object'].push({"name":res.class, "xmin":xmin, "ymin":ymin, "xmax":xmax, "ymax":ymax});
         }
+        
+        // body['size']['width'] = width;
+        // body['size']['height'] = height;
+        // body['size']['depth'] = 3;
+        // console.log("body : ", body);
         retXml = jsonToXml(body);
         console.log("retXml", retXml);
         body['xml_data'] = retXml;
