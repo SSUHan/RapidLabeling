@@ -27,10 +27,10 @@ class DataControllor:
 		self.label_path_list = []
 		infomation_file = os.path.join(rc_app.root_path, "static", "datacenter", "datacenter_infomation.json")
 		with open(infomation_file) as f:
-			infomation_json = json.load(f)
-		self.current_image_number = infomation_json['current_image_number']
-		self.skip_step = infomation_json['skip_step']
-		self.annotations_folder_path = os.path.join(rc_app.root_path, infomation_json['annotations_folder_path'])
+			self.infomation_json = json.load(f)
+		self.current_image_number = self.infomation_json['current_image_number']
+		self.skip_step = self.infomation_json['skip_step']
+		self.annotations_folder_path = os.path.join(rc_app.root_path, self.infomation_json['annotations_folder_path'])
 		for each_path in glob.glob(os.path.join(rc_app.root_path, "static", "datacenter", "images", "*")):
 			each_name = each_path.split(sep)[-1]
 			self.label_path_list.append(each_name)
@@ -51,6 +51,10 @@ class DataControllor:
 			f.write(xml_data)
 		
 		self.current_image_number += self.skip_step
+		self.infomation_json['current_image_number'] = self.current_image_number
+		with open(os.path.join(rc_app.root_path, "static", "datacenter", "datacenter_infomation.json"), 'w') as f:
+			json.dump(self.infomation_json, f)
+			print("infomation config file update..")
 		print("write something")
 
 	def next_image_path(self):
