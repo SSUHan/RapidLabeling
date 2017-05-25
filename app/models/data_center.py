@@ -58,11 +58,11 @@ class DataControllor:
 		print("write something")
 
 	def next_image_path(self):
-		if not _check(self.current_image_number):
+		if not self._check(self.current_image_number):
 			return False
 		ret = self.label_path_list[self.current_image_number]
 		# TODO : Need to skip if already labeled.
-		if _is_duplicate(ret):
+		if self._is_duplicate(ret):
 			print(ret, " file is already annotated.. To do next file")
 			self.current_image_number += self.skip_step
 			return self.next_image_path()
