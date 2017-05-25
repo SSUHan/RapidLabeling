@@ -62,6 +62,7 @@ class DataControllor:
 			return False
 		if self.total_image_number <= self.current_image_number:
 			return False
+		# TODO : Need to skip if already labeled.
 		ret = self.label_path_list[self.current_image_number]
 		return ret
 
