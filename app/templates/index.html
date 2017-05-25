@@ -12,6 +12,7 @@
         </div>
         <div class="row">
             <div class="col-md-3">
+                <h3>Who are you?</h3>
                 <h4>Choose label</h4>
                 <div class="radio">
                     <label><input type="radio" name="label" value="car" checked>car</label>
@@ -23,15 +24,18 @@
                     <label><input type="radio" name="label" value="custom">custom</label>
                 </div>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-6">
                 <img id="target_image" class="annotatable"/>
                 <button class="btn btn-default" type="submit" id="save_btn" data-loading-text="Loading...">Save</button>
                 <button class="btn btn-default" type="submit" id='reset_btn'>Reset</button>
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div id="result">
-                    </div>
+            <div class="col-md-3">
+                <div id="status">Clear...</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div id="result">
                 </div>
             </div>
         </div>

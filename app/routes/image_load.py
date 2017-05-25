@@ -6,16 +6,16 @@ import os
 def start_labeling():
 	to_client = {}
 	to_client['new_file_name'] = dc.next_image_path()
+	to_client['total_image_number'] = dc.total_image_number
+	to_client['current_image_number'] = dc.current_image_number
+	to_client['skip_step'] = dc.skip_step
 	dc.print_status()
 	return jsonify(to_client)
 
 @rc_app.route('/next_image', methods=['GET', 'POST'])
 def next_image():
 	from_client = request.form
-	print("request", type(request), request)
 	print(from_client['file_name'])
-	print(from_client['xml_data'])
-	
 	print("next image function called ")
 	to_client = {}
 	# TODO : Get new image from DataControllor
@@ -23,6 +23,9 @@ def next_image():
 		print("is built is True..")
 		dc.save_annotation(from_client['file_name'], from_client['xml_data'])
 		to_client['new_file_name'] = dc.next_image_path()
+		to_client['total_image_number'] = dc.total_image_number
+		to_client['current_image_number'] = dc.current_image_number
+		to_client['skip_step'] = dc.skip_step
 
 	print(to_client)
 	# infomation_file = os.path.join(rc_app.root_path, "static", "datacenter", "datacenter_infomation.json")

@@ -50,6 +50,10 @@ jQuery(document).ready(function ($) {
         function (data) {
             body['filename'] = data.new_file_name;
             $("#target_image").attr("src",imgDir + body.filename);
+            $('#status').empty();
+            $('<p>').text("Total Image Number : " + data.total_image_number).appendTo($('#status'));
+            $('<p>').text("Current Image Number : "+data.current_image_number).appendTo($('#status'));
+            
         });
 
 
@@ -103,6 +107,9 @@ jQuery(document).ready(function ($) {
             }, function (data) {
                 body['filename'] = data.new_file_name;
                 $("#target_image").attr("src",imgDir + body.filename);
+                $('#status').empty();
+                $('<p>').text("Total Image Number : " + data.total_image_number).appendTo($('#status'));
+                $('<p>').text("Current Image Number : "+data.current_image_number).appendTo($('#status'));
             });
     }
 
