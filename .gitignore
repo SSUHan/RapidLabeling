@@ -4,3 +4,4 @@ venvFlask/
 *.pyc
 images/
 annotations/
+*.zip

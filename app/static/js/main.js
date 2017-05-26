@@ -113,9 +113,24 @@ jQuery(document).ready(function ($) {
             });
     }
 
+    function onSkip(){
+        console.log('this is onSkip...');
+        $.post('/skip_image',
+        {
+            file_name: body.filename,
+
+        }, function(data){
+            body['filename'] = data.new_file_name;
+            $("#target_image").attr("src",imgDir + body.filename);
+            $('#status').empty();
+            $('<p>').text("Total Image Number : " + data.total_image_number).appendTo($('#status'));
+            $('<p>').text("Current Image Number : "+data.current_image_number).appendTo($('#status'));
+        });
+    }
+
     $('#save_btn').on('click', onSave);
     $('#reset_btn').on('click', onReSet);
-    
+    $('#skip_btn').on('click', onSkip);
 
     $(document).on('mouseup', function () {
         $('.annotorious-editor-text').val($("input:radio[name=label]:checked").val());

@@ -44,18 +44,21 @@ class DataControllor:
 		self.connector += 1
 		pass
 
-	def save_annotation(self, file_name, xml_data):
-		xml_file_name = file_name.split('.')[0] +'.xml'
-		print(xml_file_name)
-		with open(os.path.join(self.annotations_folder_path, xml_file_name), 'w+') as f:
-			f.write(xml_data)
+	def save_annotation(self, file_name, xml_data, is_save=True):
+		if is_save:
+			# if skip image save, then is_save = False
+			xml_file_name = file_name.split('.')[0] +'.xml'
+			print(xml_file_name)
+			with open(os.path.join(self.annotations_folder_path, xml_file_name), 'w+') as f:
+				f.write(xml_data)
+				print(xml_file_name, " saved..")
 		
 		self.current_image_number += self.skip_step
 		self.infomation_json['current_image_number'] = self.current_image_number
 		with open(os.path.join(rc_app.root_path, "static", "datacenter", "datacenter_infomation.json"), 'w') as f:
 			json.dump(self.infomation_json, f)
 			print("infomation config file update..")
-		print("write something")
+
 
 	def next_image_path(self):
 		if not self._check(self.current_image_number):
@@ -87,7 +90,7 @@ class DataControllor:
 			False: No. Do annotate
 		"""
 		anno_file = image_file.split('.')[0] + '.xml'
-		print("[in _is_duplicate], anno_file : ", anno_file)
+		# print("[in _is_duplicate], anno_file : ", anno_file)
 		return os.path.exists(os.path.join(self.annotations_folder_path, anno_file))
 
 	def print_status(self):

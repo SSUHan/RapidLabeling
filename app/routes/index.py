@@ -6,5 +6,5 @@ def index_page():
 	# image_path = 'app/datacenter/images/dog.jpg'
 	# image_path = os.path.join(rc_app.root_path, 'datacenter', 'images', 'dog.jpg')
 	image_path = url_for('static', filename='datacenter/images/dog.jpg')
-	print(image_path)
+	
 	return render_template('index.html', image_path=image_path)
