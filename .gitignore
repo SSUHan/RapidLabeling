@@ -5,3 +5,4 @@ venvFlask/
 images/
 annotations/
 *.zip
+video_*/
