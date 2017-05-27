@@ -1,50 +1,144 @@
-{% extends 'layout.html' %}
-{% block body %}
-<body onload="init();">
-    <script>
-    function init() {
-        anno.makeAnnotatable(document.getElementById('myImage'));
-    }
-    </script>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12"><h1>RapidCheck Labeling Sites!</h1></div>
-        </div>
-        <div class="row">
-            <div class="col-md-3">
-                <h3>Who are you?</h3>
-                <h4>Choose label</h4>
-                <div class="radio">
-                    <label><input type="radio" name="label" value="car" checked>car</label>
-                </div>
-                <div class="radio">
-                    <label><input type="radio" name="label" value="person">person</label>
-                </div>
-                <div class="radio">
-                    <label><input type="radio" name="label" value="custom">custom</label>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <img id="target_image" class="annotatable"/>
-                <div class="row">
-                    <button class="btn btn-default" type="submit" id="back_btn">Back</button>
-                    <button class="btn btn-default" type="submit" id="save_btn" data-loading-text="Loading...">Save (3)</button>
-                    <button class="btn btn-default" type="submit" id='reset_btn'>Reset (4)</button>
-                    <button class="btn btn-default" type="submit" id='skip_btn'>Skip (5)</button>
-                </div>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Rapid Labeling</title>
+    <link type="text/css" rel="stylesheet"  href="../static/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <link type="text/css" rel="stylesheet"  href="../static/css/small-business.css">
+    <link type="text/css" rel="stylesheet" href="http://annotorious.github.com/latest/annotorious.css"/>
+</head>
+<body>
 
-            </div>
-            <div class="col-md-3">
-                <div id="status">Clear...</div>
-            </div>
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                <img src="http://placehold.it/150x50&text=Logo" alt="">
+            </a>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div id="result">
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="#">About</a>
+                </li>
+                <li>
+                    <a href="#">Services</a>
+                </li>
+                <li>
+                    <a href="#">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+<!-- Page Content -->
+<div class="container">
+
+    <!-- Heading Row -->
+    <div class="row">
+        <div class="col-md-8">
+            <!--<img class="img-responsive img-rounded" src="http://placehold.it/672x672" alt="">-->
+            <img style="width:672px;height:672px;" id="target_image" class="annotatable"/>
+        </div>
+        <div class="col-md-4">
+            <h1>Rapid Labeling!</h1>
+
+            <div class="row">
+                <form id="videoForm" class="form-horizontal col-sm-12" role="form">
+
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-facetime-video"></i></span>
+                        <input id="login-token" type="text" class="form-control" name="token" value=""
+                               placeholder="upload video or insert token">
+                    </div>
+                    <div class="col-sm-12 controls" style="margin:15px;">
+                        <a class="btn btn-default" href="#">Video file</a>
+                        <a id="btn-login" href="#" class="btn btn-success"> Start </a>
+                    </div>
+
+                </form>
+                <form id="userForm" class="form-horizontal col-sm-12" role="form">
+
+                    <h4>Who are you?</h4>
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input id="login-username" type="username" class="form-control" name="username"
+                               placeholder="username">
+                    </div>
+                </form>
+
+                <div class="col-sm-12">
+                    <h4>Set default class</h4>
+                    <div class="radio">
+                        <label><input type="radio" name="label" value="car" checked>car(1)</label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" name="label" value="person">person(2)</label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" name="label" value="custom">custom</label>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <button class="btn btn-default" type="submit" id='back_btn'>Back</button>
+                    <button class="btn btn-default" type="submit" id="save_btn">Save</button>
+                    <button class="btn btn-default" type="submit" id='reset_btn'>Reset</button>
+                    <button class="btn btn-default" type="submit" id='skip_btn'>Skip</button>
                 </div>
             </div>
         </div>
     </div>
+
+
+    <hr>
+
+    <!-- Call to Action Well -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="well row">
+                <div class="col-sm-3" id="status"></div>
+                <div class="col-sm-9" id="result">Clear...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="row">
+            <div class="col-lg-12">
+                <p>Copyright &copy; RapidCheck 2017</p>
+            </div>
+        </div>
+    </footer>
+
+</div>
+<!-- /.container -->
+
+<script type="text/javascript" src="http://annotorious.github.com/latest/annotorious.min.js"></script>
+<script type="text/javascript"  src="../static/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="../static/js/vkbeautify.0.99.00.beta.js"></script>
+<script type="text/javascript"  src="../static/js/main.js"></script>
+
 </body>
 
-{% endblock %}
+</html>

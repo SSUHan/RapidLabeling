@@ -31,6 +31,7 @@ function jsonToXmlString(json) {
             xml += "</" + key + ">"; 
         }
     }
+    console.log(xml);
     return xml;
 }
 
@@ -42,34 +43,44 @@ function jsonToXml(json) {
     return xml;
 }
 
-
 jQuery(document).ready(function ($) {
     var imgDir = "/static/datacenter/images/";
     window.body = {};
-    $.get('/start_labeling',
-        function (data) {
-            body['filename'] = data.new_file_name;
-            $("#target_image").attr("src",imgDir + body.filename);
-            $('#status').empty();
-            $('<p>').text("Total Image Number : " + data.total_image_number).appendTo($('#status'));
-            $('<p>').text("Current Image Number : "+data.current_image_number).appendTo($('#status'));
-            
-        });
+    var width = 448, height = 448;
 
-    function onBack(){
-        console.log('this is onBack...');
-        window.body = {};
-        $.get('/back_image',
-            function (data) {
-                body['filename'] = data.new_file_name;
-                $("#target_image").attr("src",imgDir + body.filename);
-                $('#status').empty();
-                $('<p>').text("Total Image Number : " + data.total_image_number).appendTo($('#status'));
-                $('<p>').text("Current Image Number : "+data.current_image_number).appendTo($('#status'));
-                
-            });
 
+    function setAnnotations(g, filename) {
+        var ad = new Ad("rect",g);
+        window.an = new Gd(imgDir + filename,'',ad);
+        anno.addAnnotation(an);
+    };
+
+    function getObjectsFromXmlString (xmlStr) {
+        var objectTags = $(xmlStr)[0].getElementsByTagName('object');
+        var objs = [];
+        var copyKeys = ['xmin', 'xmax', 'ymin', 'ymax'];
+        for (var i=0; i<objectTags.length; i++) {
+            var obj = {};
+            for (var j=0; j<copyKeys.length; j++) {
+                obj[copyKeys[j]] = parseFloat(objectTags[i].getElementsByTagName(copyKeys[j])[0].innerText);
+            }
+            obj.name = objectTags[i].getElementsByTagName('name')[0].innerText;
+            objs.push(obj);
+        }
+        return objs;
     }
+
+    function setImage (data) {
+        body['filename'] = data.new_file_name;
+        body['xml'] = data.new_xml_data;
+        console.log(data.new_xml_data);
+        $("#target_image").attr("src",imgDir + body.filename);
+        $('#status').empty();
+        $('<p>').text("Total Image Number : " + data.total_image_number).appendTo($('#status'));
+        $('<p>').text("Current Image Number : "+data.current_image_number).appendTo($('#status'));
+    }
+
+    $.get('/start_labeling', setImage);
 
     function onSave() {
         $('#result').empty();
@@ -77,7 +88,6 @@ jQuery(document).ready(function ($) {
         
         body['object'] = [];
         // set image size
-        var width = $('#target_image').width(), height = $('#target_image').height();
         $('<p>').text("width:"+width+", height:"+height).appendTo($('#result'));
         body['size'] = {"width":width, "height":height, "depth":3};
         
@@ -95,6 +105,7 @@ jQuery(document).ready(function ($) {
         retXml = jsonToXml(body);
         console.log("retXml", retXml);
         body['xml_data'] = retXml;
+
         onNext();
     }
 
@@ -104,9 +115,29 @@ jQuery(document).ready(function ($) {
         anno.reset();
     }
 
+
+
+    function onBack(){
+        console.log('this is onBack...');
+        window.body = {};
+        $.get('/back_image', setImage);
+    }
     // add image load event
     $('#target_image').on('load', function () {
+        width = $('#target_image').get(0).naturalWidth;
+        height = $('#target_image').get(0).naturalHeight;
         onReSet();
+        if (body.xml) {
+            var objs = getObjectsFromXmlString(body.xml);
+            console.log(objs);
+            for (var i=0; i<objs.length; i++) {
+                var objWidth = objs[i].xmax - objs[i].xmin;
+                var objHeight = objs[i].ymax - objs[i].ymin;
+                var g = {x:objs[i].xmin/width, y:objs[i].ymin/height, width:objWidth/width, height:objHeight/height};
+                setAnnotations(g, body['filename']);
+            }
+        }
+        delete body.xml;
     });
 
     function onNext() {
@@ -116,13 +147,7 @@ jQuery(document).ready(function ($) {
             {
                 file_name: body.filename,
                 xml_data: vkbeautify.xml(body.xml_data.outerHTML)
-            }, function (data) {
-                body['filename'] = data.new_file_name;
-                $("#target_image").attr("src",imgDir + body.filename);
-                $('#status').empty();
-                $('<p>').text("Total Image Number : " + data.total_image_number).appendTo($('#status'));
-                $('<p>').text("Current Image Number : "+data.current_image_number).appendTo($('#status'));
-            });
+            }, setImage);
     }
 
     function onSkip(){
@@ -131,13 +156,7 @@ jQuery(document).ready(function ($) {
         {
             file_name: body.filename,
 
-        }, function(data){
-            body['filename'] = data.new_file_name;
-            $("#target_image").attr("src",imgDir + body.filename);
-            $('#status').empty();
-            $('<p>').text("Total Image Number : " + data.total_image_number).appendTo($('#status'));
-            $('<p>').text("Current Image Number : "+data.current_image_number).appendTo($('#status'));
-        });
+        }, setImage);
     }
 
     $('#back_btn').on('click', onBack);
