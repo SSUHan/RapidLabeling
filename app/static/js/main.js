@@ -179,14 +179,14 @@ jQuery(document).ready(function ($) {
             // onPress button 2
             $('input:radio[name=label][value=car]').attr('checked', false);
             $('input:radio[name=label][value=person]').attr('checked', true);
-        } else if (e.keyCode == 51) {
-            // onPress button 3
+        } else if (e.keyCode == 81) {
+            // onPress button q
+            onBack();
+        } else if (e.keyCode == 87) {
+            // onPress button w
             onSave();
-        } else if (e.keyCode == 52) {
-            // onPress button 4
-            onReSet();
-        } else if (e.keyCode == 53){
-            // onPress button 5
+        } else if (e.keyCode == 69){
+            // onPress button e
             onSkip();
         }
     });
