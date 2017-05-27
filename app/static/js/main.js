@@ -85,8 +85,8 @@ jQuery(document).ready(function ($) {
     function onSave() {
         $('#result').empty();
         var annos = anno.getAnnotations();
-        
         body['object'] = [];
+        body['owner'] = { name : $('#login-username').get(0).value };
         // set image size
         $('<p>').text("width:"+width+", height:"+height).appendTo($('#result'));
         body['size'] = {"width":width, "height":height, "depth":3};
