@@ -31,6 +31,7 @@ function jsonToXmlString(json) {
             xml += "</" + key + ">"; 
         }
     }
+    console.log(xml);
     return xml;
 }
 
@@ -43,19 +44,43 @@ function jsonToXml(json) {
 }
 
 
+
 jQuery(document).ready(function ($) {
     var imgDir = "/static/datacenter/images/";
     window.body = {};
-    $.get('/start_labeling',
-        function (data) {
-            body['filename'] = data.new_file_name;
-            $("#target_image").attr("src",imgDir + body.filename);
-            $('#status').empty();
-            $('<p>').text("Total Image Number : " + data.total_image_number).appendTo($('#status'));
-            $('<p>').text("Current Image Number : "+data.current_image_number).appendTo($('#status'));
-            
-        });
 
+    function setAnnotations(g, filename) {
+        var ad = new Ad("rect",g);
+        window.an = new Gd(imgDir + filename,'',ad);
+        anno.addAnnotation(an);
+    }
+
+    function getObjectsFromXmlString (xmlStr) {
+        var objectTags = $(xmlStr)[0].getElementsByTagName('object');
+        var objs = [];
+        var copyKeys = ['xmin', 'xmax', 'ymin', 'ymax'];
+        for (var i=0; i<objectTags.length; i++) {
+            var obj = {};
+            for (var j=0; j<copyKeys.length; j++) {
+                obj[copyKeys[j]] = parseFloat(objectTags[i].getElementsByTagName(copyKeys[j])[0].innerText);
+            }
+            obj.name = objectTags[i].getElementsByTagName('name')[0].innerText;
+            objs.push(obj);
+        }
+        return objs;
+    }
+
+    function setImage (data) {
+        body['filename'] = data.new_file_name;
+        body['xml'] = data.new_xml_data;
+        body['xml'] = "<annotation><filename>dog4.jpg</filename><object><name/><xmin>59.300000000000004</xmin><ymin>30.5</ymin><xmax>355.8</xmax><ymax>152.5</ymax></object><object><name>person</name><xmin>311</xmin><ymin>198</ymin><xmax>421</xmax><ymax>273</ymax></object><size><width>593</width><height>305</height><depth>3</depth></size></annotation>"
+        $("#target_image").attr("src",imgDir + body.filename);
+        $('#status').empty();
+        $('<p>').text("Total Image Number : " + data.total_image_number).appendTo($('#status'));
+        $('<p>').text("Current Image Number : "+data.current_image_number).appendTo($('#status'));
+    }
+
+    $.get('/start_labeling', setImage);
 
     // body['file_name'] = '00001.jpg'; // TODO : get from server dynamically
 
@@ -83,6 +108,7 @@ jQuery(document).ready(function ($) {
         retXml = jsonToXml(body);
         console.log("retXml", retXml);
         body['xml_data'] = retXml;
+
         onNext();
     }
 
@@ -95,6 +121,18 @@ jQuery(document).ready(function ($) {
     // add image load event
     $('#target_image').on('load', function () {
         onReSet();
+        if (body.xml) {
+            var width = $('#target_image').width(), height = $('#target_image').height();
+            var objs = getObjectsFromXmlString(body.xml);
+            console.log(objs);
+            for (var i=0; i<objs.length; i++) {
+                var objWidth = objs[i].xmax - objs[i].xmin;
+                var objHeight = objs[i].ymax - objs[i].ymin;
+                var g = {x:objs[i].xmin/width, y:objs[i].ymin/height, width:objWidth/width, height:objHeight/height};
+                setAnnotations(g, body['filename']);
+            }
+        }
+        delete body.xml;
     });
 
     function onNext() {
@@ -104,13 +142,7 @@ jQuery(document).ready(function ($) {
             {
                 file_name: body.filename,
                 xml_data: vkbeautify.xml(body.xml_data.outerHTML)
-            }, function (data) {
-                body['filename'] = data.new_file_name;
-                $("#target_image").attr("src",imgDir + body.filename);
-                $('#status').empty();
-                $('<p>').text("Total Image Number : " + data.total_image_number).appendTo($('#status'));
-                $('<p>').text("Current Image Number : "+data.current_image_number).appendTo($('#status'));
-            });
+            }, setImage);
     }
 
     function onSkip(){
