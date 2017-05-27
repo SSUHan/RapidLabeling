@@ -49,9 +49,9 @@ jQuery(document).ready(function ($) {
     var width = 448, height = 448;
 
 
-    function setAnnotations(g, filename) {
+    function setAnnotations(g, filename, name) {
         var ad = new Ad("rect",g);
-        window.an = new Gd(imgDir + filename,'',ad);
+        window.an = new Gd(imgDir + filename, name, ad);
         anno.addAnnotation(an);
     };
 
@@ -134,8 +134,9 @@ jQuery(document).ready(function ($) {
                 var objWidth = objs[i].xmax - objs[i].xmin;
                 var objHeight = objs[i].ymax - objs[i].ymin;
                 var g = {x:objs[i].xmin/width, y:objs[i].ymin/height, width:objWidth/width, height:objHeight/height};
-                setAnnotations(g, body['filename']);
+                setAnnotations(g, body['filename'], objs[i].name);
             }
+            window.objs = objs;
         }
         delete body.xml;
     });
