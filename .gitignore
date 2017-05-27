@@ -6,3 +6,4 @@ images/
 annotations/
 *.zip
 video_*/
+datacenter_information.json

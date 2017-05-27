@@ -73,7 +73,7 @@ jQuery(document).ready(function ($) {
     function setImage (data) {
         body['filename'] = data.new_file_name;
         body['xml'] = data.new_xml_data;
-        body['xml'] = "<annotation><filename>dog4.jpg</filename><object><name/><xmin>59.300000000000004</xmin><ymin>30.5</ymin><xmax>355.8</xmax><ymax>152.5</ymax></object><object><name>person</name><xmin>311</xmin><ymin>198</ymin><xmax>421</xmax><ymax>273</ymax></object><size><width>593</width><height>305</height><depth>3</depth></size></annotation>"
+        console.log(data.new_xml_data);
         $("#target_image").attr("src",imgDir + body.filename);
         $('#status').empty();
         $('<p>').text("Total Image Number : " + data.total_image_number).appendTo($('#status'));
@@ -81,8 +81,6 @@ jQuery(document).ready(function ($) {
     }
 
     $.get('/start_labeling', setImage);
-
-    // body['file_name'] = '00001.jpg'; // TODO : get from server dynamically
 
     function onSave() {
         $('#result').empty();
@@ -151,13 +149,7 @@ jQuery(document).ready(function ($) {
         {
             file_name: body.filename,
 
-        }, function(data){
-            body['filename'] = data.new_file_name;
-            $("#target_image").attr("src",imgDir + body.filename);
-            $('#status').empty();
-            $('<p>').text("Total Image Number : " + data.total_image_number).appendTo($('#status'));
-            $('<p>').text("Current Image Number : "+data.current_image_number).appendTo($('#status'));
-        });
+        }, setImage);
     }
 
     $('#save_btn').on('click', onSave);
