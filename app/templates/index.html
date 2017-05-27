@@ -1,46 +1,71 @@
-{% extends 'layout.html' %}
-{% block body %}
-<body onload="init();">
-    <script>
-    function init() {
-        anno.makeAnnotatable(document.getElementById('myImage'));
-    }
-    </script>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12"><h1>RapidCheck Labeling Sites!</h1></div>
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Rapid Labeling</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../static/css/small-business.css" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="http://annotorious.github.com/latest/annotorious.css"/>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12"><h1>RapidCheck Labeling Sites!</h1></div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <h3>Who are you?</h3>
+            <h4>Choose label</h4>
+            <div class="radio">
+                <label><input type="radio" name="label" value="car" checked>car</label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" name="label" value="person">person</label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" name="label" value="custom">custom</label>
+            </div>
         </div>
-        <div class="row">
-            <div class="col-md-3">
-                <h3>Who are you?</h3>
-                <h4>Choose label</h4>
-                <div class="radio">
-                    <label><input type="radio" name="label" value="car" checked>car</label>
-                </div>
-                <div class="radio">
-                    <label><input type="radio" name="label" value="person">person</label>
-                </div>
-                <div class="radio">
-                    <label><input type="radio" name="label" value="custom">custom</label>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <img id="target_image" class="annotatable"/>
-                <button class="btn btn-default" type="submit" id="save_btn" data-loading-text="Loading...">Save</button>
-                <button class="btn btn-default" type="submit" id='reset_btn'>Reset</button>
-                <button class="btn btn-default" type="submit" id='skip_btn'>Skip</button>
-            </div>
-            <div class="col-md-3">
-                <div id="status">Clear...</div>
-            </div>
+        <div class="col-md-6">
+            <img id="target_image" class="annotatable"/>
+            <button class="btn btn-default" type="submit" id="save_btn" data-loading-text="Loading...">Save</button>
+            <button class="btn btn-default" type="submit" id='reset_btn'>Reset</button>
+            <button class="btn btn-default" type="submit" id='skip_btn'>Skip</button>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div id="result">
-                </div>
+        <div class="col-md-3">
+            <div id="status">Clear...</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div id="result">
             </div>
         </div>
     </div>
+</div>
+
+
+<!--annotorious-->
+<script type="text/javascript" src="http://annotorious.github.com/latest/annotorious.min.js"/>
+<script type="text/javascript" src="{{ url_for('static', filename='js/vkbeautify.0.99.00.beta.js') }}"></script>
+<!-- jQuery -->
+<script src="../static/js/jquery.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="../static/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 
-{% endblock %}
+</html>
