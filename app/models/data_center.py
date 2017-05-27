@@ -59,6 +59,11 @@ class DataControllor:
 			json.dump(self.infomation_json, f)
 			print("infomation config file update..")
 
+	def back_image_path(self):
+		if not self._check(self.current_image_number - self.skip_step):
+			return False
+		self.current_image_number -= self.skip_step
+		return self.label_path_list[self.current_image_number]
 
 	def next_image_path(self):
 		if not self._check(self.current_image_number):
@@ -79,7 +84,7 @@ class DataControllor:
 		"""
 		if self.built is not True:
 			return False
-		if self.total_image_number <= current_num:
+		if self.total_image_number <= current_num or current_num < 0:
 			return False
 		return True
 
@@ -95,11 +100,11 @@ class DataControllor:
 
 	def print_status(self):
 		print("*"*40)
-		print("\tCurrent Connector : {}\n\
-			\tTotal Image Number : {}\n\
-			\tCurrent Image Number : {}\n\
-			\tBuilt : {}\n\
-			\tAnnotations Folder path : {}"\
+		print("Current Connector : {}\n\
+Total Image Number : {}\n\
+Current Image Number : {}\n\
+Built : {}\n\
+Annotations Folder path : {}"\
 			.format(self.connector, 
 				self.total_image_number, 
 				self.current_image_number, 

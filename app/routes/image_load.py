@@ -12,6 +12,17 @@ def start_labeling():
 	dc.print_status()
 	return jsonify(to_client)
 
+@rc_app.route('/back_image', methods=['GET'])
+def back_image():
+	print("back image function called")
+	to_client = {}
+	to_client['new_file_name'] = dc.back_image_path()
+	to_client['total_image_number'] = dc.total_image_number
+	to_client['current_image_number'] = dc.current_image_number
+	to_client['skip_step'] = dc.skip_step
+	dc.print_status()
+	return jsonify(to_client)
+
 @rc_app.route('/next_image', methods=['GET', 'POST'])
 def next_image():
 	from_client = request.form

@@ -56,8 +56,20 @@ jQuery(document).ready(function ($) {
             
         });
 
+    function onBack(){
+        console.log('this is onBack...');
+        window.body = {};
+        $.get('/back_image',
+            function (data) {
+                body['filename'] = data.new_file_name;
+                $("#target_image").attr("src",imgDir + body.filename);
+                $('#status').empty();
+                $('<p>').text("Total Image Number : " + data.total_image_number).appendTo($('#status'));
+                $('<p>').text("Current Image Number : "+data.current_image_number).appendTo($('#status'));
+                
+            });
 
-    // body['file_name'] = '00001.jpg'; // TODO : get from server dynamically
+    }
 
     function onSave() {
         $('#result').empty();
@@ -128,6 +140,7 @@ jQuery(document).ready(function ($) {
         });
     }
 
+    $('#back_btn').on('click', onBack);
     $('#save_btn').on('click', onSave);
     $('#reset_btn').on('click', onReSet);
     $('#skip_btn').on('click', onSkip);
@@ -149,9 +162,12 @@ jQuery(document).ready(function ($) {
         } else if (e.keyCode == 51) {
             // onPress button 3
             onSave();
-        } else if (E.keyCode == 52) {
+        } else if (e.keyCode == 52) {
             // onPress button 4
             onReSet();
+        } else if (e.keyCode == 53){
+            // onPress button 5
+            onSkip();
         }
     });
 });
