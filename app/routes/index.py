@@ -15,7 +15,7 @@ def make_dir():
 	to_client = {}
 	new_hashid = fm.make_new_hashid()
 	to_client['new_hashid'] = new_hashid
-	datacenter_path = fm.get_datacenter_path(new_hashid)
+	datacenter_path = fm.make_datacenter_path(new_hashid, 'Junsu', 123)
 	to_client['datacenter_path'] = datacenter_path
 	# fm.make_new_datacenter()
 	return jsonify(to_client)
