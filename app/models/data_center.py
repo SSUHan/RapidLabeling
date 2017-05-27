@@ -62,14 +62,18 @@ class DataControllor:
 
 	def next_image_path(self):
 		if not self._check(self.current_image_number):
-			return False
+			return False, False
 		ret = self.label_path_list[self.current_image_number]
 		# TODO : Need to skip if already labeled.
 		if self._is_duplicate(ret):
-			print(ret, " file is already annotated.. To do next file")
-			self.current_image_number += self.skip_step
-			return self.next_image_path()
-		return ret
+			anno_file = ret.split('.')[0] + '.xml'
+			print(ret, " file is already annotated.. then, get xml file")
+			dup_xml_file = os.path.join(self.annotations_folder_path, anno_file)
+			with open(dup_xml_file, 'r') as f:
+				dup_xml_data = f.read()
+			# self.current_image_number += self.skip_step
+			return ret, dup_xml_data # self.next_image_path()
+		return ret, False
 
 	def _check(self, current_num):
 		"""
