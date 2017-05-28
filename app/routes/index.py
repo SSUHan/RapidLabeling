@@ -27,9 +27,4 @@ def make_dir():
 
 	return jsonify(to_client)
 
-@rc_app.route('/video_upload', methods=['GET', "POST"])
-def video_upload():
-	to_client = {}
-	if request.method == 'POST':
-		
-	return "no"
+
