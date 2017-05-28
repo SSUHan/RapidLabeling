@@ -3,10 +3,13 @@ import json
 from app import rc_app
 import random
 from flask import jsonify
+from .data_center import DataControllor
 
 class FolderManager:
 	built = False
 	def __init__(self):
+		self.activated_datacontrollor_dict = {}
+		
 		self.load_config()
 		self.built = True
 
@@ -15,6 +18,22 @@ class FolderManager:
 		with open(infomation_file) as f:
 			self.infomation_json = json.load(f)
 		print(len(self.infomation_json['datacenter_list']))
+		self.datacenter_root_path = os.path.join(rc_app.root_path, "static", "datacenter")
+
+
+	def get_data_controllor(self, hashid):
+		if not hashid in self.infomation_json['datacenter_list']:
+			# 애초에 hashid가 등록되어 있지 않다면, 에러를 뱉는다
+			return False
+		
+		if hashid in self.activated_datacontrollor_dict:
+			# activated 되어있다면 그대로 넘겨주고
+			return self.activated_datacontrollor_dict[hashid]
+		else:
+			# 그렇지 않다면, 새로 만들어서 넘겨주고
+			self.activated_datacontrollor_dict[hashid] = DataControllor(self.datacenter_root_path, hashid)
+			return self.activated_datacontrollor_dict[hashid]
+
 
 	def make_new_hashid(self):
 		new_hashid = ""
@@ -35,7 +54,7 @@ class FolderManager:
 		folder_path = os.path.join(rc_app.root_path, "static", "datacenter", folder_name)
 		return os.path.isdir(folder_path)
 
-	def make_datacenter_path(self, hash_id, owner, skip_step):
+	def make_datacenter_path(self, hash_id, owner, frame_num):
 		"""
 			if there is not datacenter directory, then make it and return hash id
 			make directory for new avi hash id
@@ -48,7 +67,8 @@ class FolderManager:
 			os.mkdir(os.path.join(folder_path, "images"))
 			json_file = {}
 			json_file['owner'] = owner
-			json_file['skip_step'] = skip_step
+			json_file['frame_num'] = frame_num
+			json_file['skip_step'] = 1 
 			json_file['root_folder_path'] = folder_path
 			json_file['images_folder_path'] = os.path.join(folder_path, 'images')
 			json_file['annotations_folder_path'] = os.path.join(folder_path, 'annotations')
@@ -59,3 +79,9 @@ class FolderManager:
 			folder_name = "video_{}".format(hash_id)
 			folder_path = os.path.join(rc_app.root_path, "static", "datacenter", folder_name)
 		return folder_path
+
+	def remove_all_video_datacenter(self):
+		"""
+			Remove all video datacenter folders
+		"""
+		pass

@@ -14,24 +14,27 @@ class DataControllor:
 	skip_step = 0
 	built = False
 	
-	def __init__(self):
+	def __init__(self, datacenter_root_path, hashid):
 		self.connector = 0
 		self.total_image_number = 0
 		self.current_image_number = 0
 		self.annotations_folder_path = None
 		self.skip_step = 0
 
-	def load_config(self):
+		self.load_config(datacenter_root_path, hashid)
+
+	def load_config(self, datacenter_root_path, hashid):
 		# infomation_file = url_for('static', filename='datacenter/datacenter_infomation.json')
 		# print(infomation_file)
 		self.label_path_list = []
-		infomation_file = os.path.join(rc_app.root_path, "static", "datacenter", "datacenter_infomation.json")
-		with open(infomation_file) as f:
+		self.infomation_path = os.path.join(datacenter_root_path, "video_{}".format(hashid), "{}_infomation.json".format(hashid))
+		with open(self.infomation_path) as f:
 			self.infomation_json = json.load(f)
+		
 		self.current_image_number = self.infomation_json['current_image_number']
 		self.skip_step = self.infomation_json['skip_step']
-		self.annotations_folder_path = os.path.join(rc_app.root_path, self.infomation_json['annotations_folder_path'])
-		for each_path in glob.glob(os.path.join(rc_app.root_path, "static", "datacenter", "images", "*")):
+		self.annotations_folder_path = self.infomation_json['annotations_folder_path']
+		for each_path in glob.glob(os.path.join(self.infomation_json['images_folder_path'], "*")):
 			each_name = each_path.split(sep)[-1]
 			self.label_path_list.append(each_name)
 
@@ -55,7 +58,7 @@ class DataControllor:
 		
 		self.current_image_number += self.skip_step
 		self.infomation_json['current_image_number'] = self.current_image_number
-		with open(os.path.join(rc_app.root_path, "static", "datacenter", "datacenter_infomation.json"), 'w') as f:
+		with open(self.infomation_path, 'w') as f:
 			json.dump(self.infomation_json, f)
 			print("infomation config file update..")
 
