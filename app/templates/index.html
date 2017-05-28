@@ -63,20 +63,20 @@
             <h1>Rapid Labeling!</h1>
 
             <div class="row">
+                <form action="/make_dir" id="upload_form" enctype="multipart/form-data" method="post">
+                    <input type="file" id="video_file" name="video_file" accept="video/*">
+                    <input type="button" class="btn btn-default" value="Upload File" onclick="uploadFile()">
+                    <progress id="progressBar" value="0" max="100" style="width:300px;"></progress>
+                    <p id="file_status"></p>
+                    <p id="loaded_n_total"></p>
 
-                <!--<form action="/video_upload" id="upload_form" enctype="multipart/form-data" method="post">-->
-                    <!--<input type="file" name="video_file" accept="video/*">-->
-                    <!--<input type="button" class="btn btn-default" value="Upload File" onclick="uploadFile()">-->
-                    <!--<progress id="progressBar" value="0" max="100" style="width:300px;"></progress>-->
-                    <!--<h3 id="file_status"></h3>-->
-                    <!--<p id="loaded_n_total"></p>-->
-                <!--</form>-->
-
-                <form action = "/make_dir" method = "POST"
-                      enctype = "multipart/form-data">
-                    <input type = "file" name = "file" />
-                    <input type = "submit"/>
                 </form>
+
+                <!--<form action = "/make_dir" method = "POST"-->
+                      <!--enctype = "multipart/form-data">-->
+                    <!--<input type = "file" name = "file" />-->
+                    <!--<input type = "submit"/>-->
+                <!--</form>-->
 
 
                 <form id="token_form" class="form-horizontal col-sm-12" role="form">
@@ -85,7 +85,7 @@
                     <!--</div>-->
                     <div class="col-sm-12 input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-facetime-video"></i></span>
-                        <input id="login-token" type="text" class="form-control" name="token" value=""
+                        <input id="token" type="text" class="form-control" name="token" value=""
                                placeholder="upload video or insert token">
                         <span class="input-group-btn">
                             <button class="btn btn-secondary" type="button">Start</button>
