@@ -12,18 +12,22 @@ def index_page():
 
 @rc_app.route('/make_dir', methods=['POST'])
 def make_dir():
-	if request.methods == 'POST':
+	if request.method == 'POST':
 		to_client = {}
 		new_hashid = fm.make_new_hashid()
 		to_client['new_hashid'] = new_hashid
-		datacenter_path = fm.make_datacenter_path(new_hashid, 'Junsu', 123)
-
+		new_folder_path = fm.make_datacenter_path(new_hashid, 'Junsu', 123)
+		
 		f = request.files['file']
 		print("f : ", f)
 		print("f.filename : ", f.filename)
-		# f.save(f.filename)
-
-		to_client['datacenter_path'] = datacenter_path
+		ext = f.filename.split('.')[-1]
+		if ext == "mp4" or ext == "avi":
+			f.save(os.path.join(new_folder_path, "video_{}.{}".format(new_hashid, ext)))
+			to_client['file_save_status'] = True
+		else:
+			to_client['file_save_status'] = False
+		to_client['new_folder_path'] = new_folder_path
 
 	return jsonify(to_client)
 
