@@ -57,7 +57,7 @@ jQuery(document).ready(function ($) {
         var ad = new Ad("rect", g);
         var an = new Gd(imgDir + filename, name, ad);
         anno.addAnnotation(an);
-    };
+    }
 
     function getObjectsFromXmlString(xmlStr) {
         var objectTags = $(xmlStr)[0].getElementsByTagName('object');
@@ -117,6 +117,10 @@ jQuery(document).ready(function ($) {
         onNext();
     }
 
+    function onStart() {
+        $.get('/start_labeling', setImage);
+    }
+
     function onReSet() {
         $('#result').empty();
         $('<p>').text('Clear...').appendTo($('#result'));
@@ -173,6 +177,7 @@ jQuery(document).ready(function ($) {
             }, setImage);
     }
 
+    $('#start_btn').on('click', onStart);
     $('#back_btn').on('click', onBack);
     $('#save_btn').on('click', onSave);
     $('#reset_btn').on('click', onReSet);
@@ -217,6 +222,7 @@ jQuery(document).ready(function ($) {
         _("file_status").innerHTML = "Done. Token of your video is '" + res.new_hashid + "'";
         _("token").value = res.new_hashid;
         _("progressBar").value = 0;
+        onStart();
     }
 
     function errorHandler(event) {
@@ -279,7 +285,4 @@ jQuery(document).ready(function ($) {
         ajax.open("POST", "/make_dir");
         ajax.send(formdata);
     };
-
-
-    $.get('/start_labeling', setImage);
 });
