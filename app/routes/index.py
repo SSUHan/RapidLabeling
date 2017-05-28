@@ -19,3 +19,13 @@ def make_dir():
 	to_client['datacenter_path'] = datacenter_path
 	# fm.make_new_datacenter()
 	return jsonify(to_client)
+
+@rc_app.route('/video_upload', methods=['GET', "POST"])
+def video_upload():
+	to_client = {}
+	if request.method == 'POST':
+		f = request.files['file']
+		print("f : ", f)
+		f.save(f.filename)
+		return 'file uploaded successfully'
+	return "no"
