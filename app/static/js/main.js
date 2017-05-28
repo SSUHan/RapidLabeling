@@ -43,6 +43,10 @@ function jsonToXml(json) {
     return xml;
 }
 
+function _(el){
+    return document.getElementById(el);
+}
+
 jQuery(document).ready(function ($) {
     var imgDir = "/static/datacenter/images/";
     window.body = {};
@@ -51,7 +55,7 @@ jQuery(document).ready(function ($) {
 
     function setAnnotations(g, filename, name) {
         var ad = new Ad("rect",g);
-        window.an = new Gd(imgDir + filename, name, ad);
+        var an = new Gd(imgDir + filename, name, ad);
         anno.addAnnotation(an);
     };
 
@@ -79,8 +83,6 @@ jQuery(document).ready(function ($) {
         $('<p>').text("Total Image Number : " + data.total_image_number).appendTo($('#status'));
         $('<p>').text("Current Image Number : "+data.current_image_number).appendTo($('#status'));
     }
-
-    $.get('/start_labeling', setImage);
 
     function onSave() {
         $('#result').empty();
@@ -190,4 +192,60 @@ jQuery(document).ready(function ($) {
             onSkip();
         }
     });
+    //
+    // // set file uploader
+    // function progressHandler(event){
+    //     _("loaded_n_total").innerHTML = "Uploaded "+event.loaded+" bytes of "+event.total;
+    //     var percent = (event.loaded / event.total) * 100;
+    //     _("progressBar").value = Math.round(percent);
+    //     _("file_status").innerHTML = Math.round(percent)+"% uploaded... please wait";
+    // }
+    // function completeHandler(event){
+    //     _("file_status").innerHTML = event.target.responseText;
+    //     _("progressBar").value = 0;
+    // }
+    // function errorHandler(event){
+    //     _("file_status").innerHTML = "Upload Failed";
+    // }
+    // function abortHandler(event){
+    //     _("file_status").innerHTML = "Upload Aborted";
+    // }
+    // uploadFile = function () {
+    //     var file = _("video_file").files[0];
+    //     if(typeof file === "undefined") {
+    //         _("file_status").innerHTML = "ERROR: Please browse for a file before clicking the upload button";
+    //         _("progressBar").value = 0;
+    //         return;
+    //     }
+    //
+    //     $.get('file_upload_parser.php?getsize', function(sizelimit) {
+    //         if(file.type !== "video/mp4") {
+    //             var typewarn = "ERROR: You have to select a MP4-File";
+    //             _("file_status").innerHTML = typewarn;
+    //             _("progressBar").value = 0;
+    //             return;
+    //         }
+    //         if(sizelimit < file.size) {
+    //             var sizewarn = "ERROR: The File is too big! The maximum file size is ";
+    //             sizewarn += sizelimit/(1024*1024);
+    //             sizewarn += "MB";
+    //             _("file_status").innerHTML = sizewarn;
+    //             _("progressBar").value = 0;
+    //             return;
+    //         }
+    //         var formdata = new FormData();
+    //         formdata.append("video_file", file);
+    //         formdata.append("size", file.size);
+    //         var ajax = new XMLHttpRequest();
+    //         ajax.upload.addEventListener("progress", progressHandler, false);
+    //         ajax.addEventListener("load", completeHandler, false);
+    //         ajax.addEventListener("error", errorHandler, false);
+    //         ajax.addEventListener("abort", abortHandler, false);
+    //         ajax.open("POST", "file_upload_parser.php");
+    //         ajax.send(formdata);
+    //     });
+    // };
+
+
+    $.get('/start_labeling', setImage);
 });
