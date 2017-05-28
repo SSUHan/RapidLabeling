@@ -252,10 +252,25 @@ jQuery(document).ready(function ($) {
             return;
         }
 
+        var username = _('login-username').value;
+        var frame_step = _('frame_step').value;
+        if (username.length == 0) {
+            alert('please write username');
+            $('#login-username').focus();
+            return;
+        }
+
+        if (frame_step.length == 0 || !(parseInt(frame_step)>0)) {
+            alert('please set frame step');
+            $('#frame_step').focus();
+            return;
+        }
+
         var formdata = new FormData();
         formdata.append("file", file);
         formdata.append("size", file.size);
-        formdata.append("username", "junsu");
+        formdata.append("username", username);
+        formdata.append("frame_step", frame_step);
         var ajax = new XMLHttpRequest();
         ajax.upload.addEventListener("progress", progressHandler, false);
         ajax.addEventListener("load", completeHandler, false);
