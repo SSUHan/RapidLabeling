@@ -51,7 +51,7 @@ jQuery(document).ready(function ($) {
     var imgDir = "/static/datacenter/images/";
     window.params = {};
     var width = 448, height = 448;
-
+    var hashid = '';
 
     function setAnnotations(g, filename, name) {
         var ad = new Ad("rect", g);
@@ -118,7 +118,8 @@ jQuery(document).ready(function ($) {
     }
 
     function onStart() {
-        $.get('/start_labeling', setImage);
+        hashid = _("token").value;
+        $.post('/start_labeling', {hashid:hashid}, setImage);
     }
 
     function onReSet() {
@@ -131,7 +132,7 @@ jQuery(document).ready(function ($) {
     function onBack() {
         console.log('this is onBack...');
         window.params = {};
-        $.get('/back_image', setImage);
+        $.post('/back_image', {hashid:hashid}, setImage);
     }
 
     // add image load event
@@ -163,6 +164,7 @@ jQuery(document).ready(function ($) {
         console.log("params", params)
         $.post('/next_image',
             {
+                hashid:hashid,
                 file_name: params.filename,
                 xml_data: vkbeautify.xml(params.xml_data.outerHTML)
             }, setImage);
@@ -172,6 +174,7 @@ jQuery(document).ready(function ($) {
         console.log('this is onSkip...');
         $.post('/skip_image',
             {
+                hashid:hashid,
                 file_name: params.filename,
 
             }, setImage);
@@ -219,8 +222,9 @@ jQuery(document).ready(function ($) {
 
     function completeHandler(event) {
         var res = JSON.parse(event.target.responseText);
-        _("file_status").innerHTML = "Done. Token of your video is '" + res.new_hashid + "'";
-        _("token").value = res.new_hashid;
+        hashid = res.new_hashid;
+        _("file_status").innerHTML = "Done. Token of your video is '" + hashid + "'";
+        _("token").value = hashid;
         _("progressBar").value = 0;
         onStart();
     }

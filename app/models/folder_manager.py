@@ -1,3 +1,5 @@
+#-*- coding: utf-8 -*-
+
 import os
 import json
 from app import rc_app
@@ -9,7 +11,7 @@ class FolderManager:
 	built = False
 	def __init__(self):
 		self.activated_datacontrollor_dict = {}
-		
+
 		self.load_config()
 		self.built = True
 
@@ -25,7 +27,7 @@ class FolderManager:
 		if not hashid in self.infomation_json['datacenter_list']:
 			# 애초에 hashid가 등록되어 있지 않다면, 에러를 뱉는다
 			return False
-		
+
 		if hashid in self.activated_datacontrollor_dict:
 			# activated 되어있다면 그대로 넘겨주고
 			return self.activated_datacontrollor_dict[hashid]
@@ -68,7 +70,7 @@ class FolderManager:
 			json_file = {}
 			json_file['owner'] = owner
 			json_file['frame_num'] = frame_num
-			json_file['skip_step'] = 1 
+			json_file['skip_step'] = 1
 			json_file['root_folder_path'] = folder_path
 			json_file['images_folder_path'] = os.path.join(folder_path, 'images')
 			json_file['annotations_folder_path'] = os.path.join(folder_path, 'annotations')
