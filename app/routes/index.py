@@ -16,8 +16,8 @@ def make_dir():
 		to_client = {}
 		new_hashid = fm.make_new_hashid()
 		to_client['new_hashid'] = new_hashid
-		new_folder_path = fm.make_datacenter_path(new_hashid, 'Junsu', 123)
-		
+		new_folder_path = fm.make_datacenter_path(new_hashid, request.form['username'], request.form['frame_step'])
+
 		f = request.files['file']
 		print("f : ", f)
 		print("f.filename : ", f.filename)

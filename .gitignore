@@ -7,3 +7,4 @@ annotations/
 *.zip
 video_*/
 datacenter_information.json
+foldermanager_infomation.json
