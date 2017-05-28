@@ -12,7 +12,7 @@ def index_page():
 
 @rc_app.route('/make_dir', methods=['POST'])
 def make_dir():
-	if request.methods == 'POST'
+	if request.methods == 'POST':
 		to_client = {}
 		new_hashid = fm.make_new_hashid()
 		to_client['new_hashid'] = new_hashid
