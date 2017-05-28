@@ -255,6 +255,7 @@ jQuery(document).ready(function ($) {
         var formdata = new FormData();
         formdata.append("file", file);
         formdata.append("size", file.size);
+        formdata.append("username", "junsu");
         var ajax = new XMLHttpRequest();
         ajax.upload.addEventListener("progress", progressHandler, false);
         ajax.addEventListener("load", completeHandler, false);
