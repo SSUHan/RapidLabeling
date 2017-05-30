@@ -20,6 +20,9 @@ def parse_video(video_path, image_name, images_folder_path, frame_step):
 		images_folder_path : dest image folder path
 		frame_step : step size for saving image from video
 	"""
+	if not isinstance(frame_step, int):
+		frame_step = 60 # default 
+	
 	cap = cv2.VideoCapture(video_path)
 	frameNum = 0
 	
