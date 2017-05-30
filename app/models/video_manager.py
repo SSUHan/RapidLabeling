@@ -1,11 +1,9 @@
 import cv2
+from os import sep
 
 def parse_video(video_path, images_path, frame_step):
 	cap = cv2.VideoCapture(video_path)
 	frameNum = 0
-	
-	cv2.namedWindow('Detection Window',cv2.WINDOW_NORMAL)
-	cv2.resizeWindow('Detection Window', 600,600)
 	
 	while True:
 		ret, frame = cap.read()
@@ -16,7 +14,7 @@ def parse_video(video_path, images_path, frame_step):
 			continue
 		print("Save Image frameNum : ", frameNum)
 		resized_frame = cv2.resize(frame, (448, 448))
-		cv2.imshow('Detection Window', resized_frame)
+		
 		if cv2.waitKey(0) & 0xFF == ord('q'):
 			break
 
@@ -24,4 +22,4 @@ def parse_video(video_path, images_path, frame_step):
 	cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-	parse_video('/Users/myZZUNG/myworkspace/git-storage/RapidLabeling/app/static/datacenter/video_375145/video_375145.mp4', 30)
+	parse_video('C:\\Users\\SoMa\\myworkspace\\object_detection_testset\\tracking.mp4', '.', 30)
