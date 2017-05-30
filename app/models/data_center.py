@@ -20,7 +20,7 @@ class DataControllor:
 		self.current_image_number = 0
 		self.annotations_folder_path = None
 		self.skip_step = 0
-
+		self.hashid = hashid
 		self.load_config(datacenter_root_path, hashid)
 
 	def load_config(self, datacenter_root_path, hashid):
@@ -39,6 +39,7 @@ class DataControllor:
 			self.label_path_list.append(each_name)
 
 		self.total_image_number = len(self.label_path_list)
+		self.hashid = hashid
 		
 		self.built = True
 		self.print_status()
@@ -50,6 +51,8 @@ class DataControllor:
 	def save_annotation(self, file_name, xml_data, is_save=True):
 		if is_save:
 			# if skip image save, then is_save = False
+			file_name = file_name.replace('/', sep)
+			file_name = file_name.split(sep)[-1]
 			xml_file_name = file_name.split('.')[0] +'.xml'
 			print(xml_file_name)
 			with open(os.path.join(self.annotations_folder_path, xml_file_name), 'w+') as f:
@@ -74,8 +77,8 @@ class DataControllor:
 			with open(dup_xml_file, 'r') as f:
 				dup_xml_data = f.read()
 			# self.current_image_number += self.skip_step
-			return ret, dup_xml_data # self.next_image_path()
-		return ret, False
+			return "video_{}/images/{}".format(self.hashid,ret), dup_xml_data # self.next_image_path()
+		return "video_{}/images/{}".format(self.hashid,ret), False
 
 	def next_image_path(self):
 		if not self._check(self.current_image_number):
@@ -89,8 +92,8 @@ class DataControllor:
 			with open(dup_xml_file, 'r') as f:
 				dup_xml_data = f.read()
 			# self.current_image_number += self.skip_step
-			return ret, dup_xml_data # self.next_image_path()
-		return ret, False
+			return "video_{}/images/{}".format(self.hashid,ret), dup_xml_data # self.next_image_path()
+		return "video_{}/images/{}".format(self.hashid,ret), False
 
 	def _check(self, current_num):
 		"""

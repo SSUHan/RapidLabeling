@@ -1,6 +1,7 @@
 from app import rc_app, fm
 from flask import render_template, url_for, jsonify, request
 import os
+from app.models.video_manager import parse_video
 
 @rc_app.route('/')
 def index_page():
@@ -23,8 +24,11 @@ def make_dir():
 		print("f.filename : ", f.filename)
 		ext = f.filename.split('.')[-1]
 		if ext == "mp4" or ext == "avi":
-			f.save(os.path.join(new_folder_path, "video_{}.{}".format(new_hashid, ext)))
+			video_path = os.path.join(new_folder_path, "video_{}.{}".format(new_hashid, ext))
+			f.save(video_path)
 			to_client['file_save_status'] = True
+			dc = fm.get_data_controllor(new_hashid)
+			parse_video(video_path, "video_{}".format(new_hashid), dc.infomation_json['images_folder_path'], int(request.form['frame_step']))
 		else:
 			to_client['file_save_status'] = False
 		to_client['new_folder_path'] = new_folder_path

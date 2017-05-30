@@ -3,6 +3,9 @@ from os import sep
 import os
 
 def make_frame_name(frameNum, space_size=6):
+	"""
+		36 -> return 000036
+	"""
 	frame_num_str = str(frameNum)
 	zero_str = ''
 	for i in range(space_size-len(frame_num_str)):
@@ -30,10 +33,7 @@ def parse_video(video_path, image_name, images_folder_path, frame_step):
 		print("Save Image frameNum : ", frameNum)
 		resized_frame = cv2.resize(frame, (448, 448))
 		cv2.imwrite(os.path.join(images_folder_path, image_name+"_{}.png".format(make_frame_name(frameNum))), resized_frame)
-		cv2.imshow('window', resized_frame)
-		if cv2.waitKey(0) & 0xFF == ord('q'):
-			break
-
+		
 	cap.release()
 	cv2.destroyAllWindows()
 

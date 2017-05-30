@@ -30,7 +30,9 @@ class FolderManager:
 
 		if hashid in self.activated_datacontrollor_dict:
 			# activated 되어있다면 그대로 넘겨주고
-			return self.activated_datacontrollor_dict[hashid]
+			dc = self.activated_datacontrollor_dict[hashid]
+			dc.load_config(self.datacenter_root_path, hashid)
+			return dc
 		else:
 			# 그렇지 않다면, 새로 만들어서 넘겨주고
 			self.activated_datacontrollor_dict[hashid] = DataControllor(self.datacenter_root_path, hashid)

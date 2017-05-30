@@ -48,7 +48,7 @@ function _(el) {
 }
 
 jQuery(document).ready(function ($) {
-    var imgDir = "/static/datacenter/images/";
+    var imgDir = "/static/datacenter/";
     window.params = {};
     var width = 448, height = 448;
     var hashid = '';
