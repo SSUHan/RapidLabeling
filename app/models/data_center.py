@@ -69,6 +69,11 @@ class DataControllor:
 		if not self._check(self.current_image_number - self.skip_step):
 			return False, False
 		self.current_image_number -= self.skip_step
+		self.infomation_json['current_image_number'] = self.current_image_number
+		with open(self.infomation_path, 'w') as f:
+			json.dump(self.infomation_json, f)
+			print("infomation config file update..")
+		
 		ret = self.label_path_list[self.current_image_number]
 		if self._is_duplicate(ret):
 			anno_file = ret.split('.')[0] + '.xml'
