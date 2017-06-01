@@ -12,7 +12,7 @@ def start_labeling():
 		to_client['status'] = False
 		return jsonify(to_client)
 
-	to_client['new_file_name'], to_client['new_xml_data'] = dc.next_image_path()
+	to_client['new_folder_path'], to_client['new_file_name'], to_client['new_xml_data'] = dc.next_image_path()
 	to_client['total_image_number'] = dc.total_image_number
 	to_client['current_image_number'] = dc.current_image_number
 	to_client['skip_step'] = dc.skip_step
@@ -32,7 +32,7 @@ def back_image():
 		to_client['status'] = False
 		return jsonify(to_client)
 	
-	to_client['new_file_name'], to_client['new_xml_data'] = dc.back_image_path()
+	to_client['new_folder_path'], to_client['new_file_name'], to_client['new_xml_data'] = dc.back_image_path()
 	to_client['total_image_number'] = dc.total_image_number
 	to_client['current_image_number'] = dc.current_image_number
 	to_client['skip_step'] = dc.skip_step
@@ -57,7 +57,7 @@ def next_image():
 	
 	if dc.built:
 		dc.save_annotation(from_client['file_name'], from_client['xml_data'])
-		to_client['new_file_name'], to_client['new_xml_data'] = dc.next_image_path()
+		to_client['new_folder_path'], to_client['new_file_name'], to_client['new_xml_data'] = dc.next_image_path()
 		to_client['total_image_number'] = dc.total_image_number
 		to_client['current_image_number'] = dc.current_image_number
 		to_client['skip_step'] = dc.skip_step
@@ -80,7 +80,7 @@ def skip_image():
 	
 	if dc.built:
 		dc.save_annotation(from_client['file_name'], None, is_save=False) # for skip frame
-		to_client['new_file_name'], to_client['new_xml_data'] = dc.next_image_path()
+		to_client['new_folder_path'], to_client['new_file_name'], to_client['new_xml_data'] = dc.next_image_path()
 		to_client['total_image_number'] = dc.total_image_number
 		to_client['current_image_number'] = dc.current_image_number
 		to_client['skip_step'] = dc.skip_step

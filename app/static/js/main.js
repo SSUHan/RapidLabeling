@@ -73,12 +73,16 @@ jQuery(document).ready(function ($) {
         }
         return objs;
     }
-
+    var new_file_path = '';
     function setImage(data) {
         params['filename'] = data.new_file_name;
         params['xml'] = data.new_xml_data;
         console.log(data.new_xml_data);
-        $("#target_image").attr("src", imgDir + params.filename);
+        new_file_path = data.new_folder_path + params.filename;
+        $("#target_image").attr("src", imgDir + new_file_path);
+        console.log(data.new_folder_path);
+        console.log(params.filename);
+        
         $('#status').empty();
         $('<p>').text("Total Image Number : " + data.total_image_number).appendTo($('#status'));
         $('<p>').text("Current Image Number : " + data.current_image_number).appendTo($('#status'));
@@ -152,7 +156,7 @@ jQuery(document).ready(function ($) {
                     width: objWidth / width,
                     height: objHeight / height
                 };
-                setAnnotations(g, params['filename'], objs[i].name);
+                setAnnotations(g, new_file_path, objs[i].name);
             }
             window.objs = objs;
         }
@@ -252,7 +256,7 @@ jQuery(document).ready(function ($) {
             return;
         }
 
-        var sizelimit = 100*1024*1024;
+        var sizelimit = 100*1024*1024*1024;
         if (sizelimit < file.size) {
             var sizewarn = "ERROR: The File is too big! The maximum file size is ";
             sizewarn += sizelimit / (1024 * 1024);

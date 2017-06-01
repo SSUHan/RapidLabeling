@@ -67,7 +67,7 @@ class DataControllor:
 
 	def back_image_path(self):
 		if not self._check(self.current_image_number - self.skip_step):
-			return False, False
+			return False, False, False
 		self.current_image_number -= self.skip_step
 		self.infomation_json['current_image_number'] = self.current_image_number
 		with open(self.infomation_path, 'w') as f:
@@ -82,12 +82,12 @@ class DataControllor:
 			with open(dup_xml_file, 'r') as f:
 				dup_xml_data = f.read()
 			# self.current_image_number += self.skip_step
-			return "video_{}/images/{}".format(self.hashid,ret), dup_xml_data # self.next_image_path()
-		return "video_{}/images/{}".format(self.hashid,ret), False
+			return "video_{}/images/".format(self.hashid), ret, dup_xml_data # self.next_image_path()
+		return "video_{}/images/".format(self.hashid), ret, False
 
 	def next_image_path(self):
 		if not self._check(self.current_image_number):
-			return False, False
+			return False, False, False
 		ret = self.label_path_list[self.current_image_number]
 		# TODO : Need to skip if already labeled.
 		if self._is_duplicate(ret):
@@ -97,8 +97,8 @@ class DataControllor:
 			with open(dup_xml_file, 'r') as f:
 				dup_xml_data = f.read()
 			# self.current_image_number += self.skip_step
-			return "video_{}/images/{}".format(self.hashid,ret), dup_xml_data # self.next_image_path()
-		return "video_{}/images/{}".format(self.hashid,ret), False
+			return "video_{}/images/".format(self.hashid), ret, dup_xml_data # self.next_image_path()
+		return "video_{}/images/".format(self.hashid), ret, False
 
 	def _check(self, current_num):
 		"""
