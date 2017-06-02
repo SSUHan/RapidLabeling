@@ -81,11 +81,11 @@
                                placeholder="frame step (how many frames to be skipped)">
                     </div>
                 </form>
-                <form id="token_form" class="form-horizontal col-sm-12" role="form">
+                <form id="hashid_form" class="form-horizontal col-sm-12" role="form">
                     <div style="margin-bottom:20px" class="col-sm-12 input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-facetime-video"></i></span>
-                        <input id="token" type="text" class="form-control" name="token" value=""
-                               placeholder="upload video or insert token">
+                        <input id="hashid" type="text" class="form-control" name="hashid" value=""
+                               placeholder="upload video or insert hashid">
                         <span class="input-group-btn">
                             <button id="start_btn" class="btn btn-secondary" type="button">Start</button>
                         </span>
@@ -93,25 +93,27 @@
 
                     <div style="margin-bottom: 25px" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <input id="login-username" type="username" class="form-control" name="username"
+                        <input id="username" type="username" class="form-control" name="username"
                                placeholder="username">
                     </div>
                 </form>
-                <div class="col-sm-12" style="margin-top:15px;">
-                    <button class="btn btn-default" type="submit" id='back_btn'>Back (q)</button>
-                    <button class="btn btn-default" type="submit" id="save_btn">Save (w)</button>
-                    <button class="btn btn-default" type="submit" id='reset_btn'>Reset</button>
-                    <button class="btn btn-default" type="submit" id='skip_btn'>Skip (e)</button>
-                </div>
-                <div class="col-sm-12" style="margin-top:15px;">
-                    <div class="radio">
-                        <label><input type="radio" name="label" value="car" checked>car (1)</label>
+                <div id="labeling_utils" style="display: none;">
+                    <div class="col-sm-12" style="margin-top:15px;">
+                        <button class="btn btn-default" type="submit" id='back_btn'>Back (q)</button>
+                        <button class="btn btn-default" type="submit" id="save_btn">Save (w)</button>
+                        <button class="btn btn-default" type="submit" id='reset_btn'>Reset</button>
+                        <button class="btn btn-default" type="submit" id='skip_btn'>Skip (e)</button>
                     </div>
-                    <div class="radio">
-                        <label><input type="radio" name="label" value="person">person (2)</label>
-                    </div>
-                    <div class="radio">
-                        <label><input type="radio" name="label" value="custom">custom</label>
+                    <div class="col-sm-12" style="margin-top:15px;">
+                        <div class="radio">
+                            <label><input type="radio" name="label" value="car" checked>car (1)</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" name="label" value="person">person (2)</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" name="label" value="custom">custom</label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -126,7 +128,7 @@
         <div class="col-lg-12">
             <div class="well row">
                 <div class="col-sm-3" id="status"></div>
-                <div class="col-sm-9" id="result">Clear...</div>
+                <div class="col-sm-9" id="result"></div>
             </div>
         </div>
     </div>
