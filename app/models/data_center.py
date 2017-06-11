@@ -151,7 +151,7 @@ def split_datacenter(src_folder_path, dst_folder_path, train_rates=0.8):
 	"""
 	src_anno_path = os.path.join(src_folder_path, 'annotations')
 
-def _split(folder_path):
+def _split(folder_path, train_rates=0.8):
 	from numpy.random import permutation as perm
 	import numpy as np
 	files = [f for f in os.listdir(folder_path) if f.split('.')[-1] == 'xml' or f.split('.')[-1] == 'png']
