@@ -149,7 +149,24 @@ def split_datacenter(src_folder_path, dst_folder_path, train_rates=0.8):
 		dst_folder_path 아래에 annotations/ 와 images/ 가 생성될 예정이다.
 		return trainval_indexs, test_indexs
 	"""
+	from shutil import copyfile
+	
 	src_anno_path = os.path.join(src_folder_path, 'annotations')
+	src_images_path = os.path.join(src_folder_path, 'images')
+	anno_files, trainval_indexs, test_indexs = _split(src_anno_pathc, train_rates)
+	
+	trainval_folder_path = _make_datacetner_folder(dst_folder_path+'_trainval')
+	test_folder_path = _make_datacetner_folder(dst_folder_path+'_test')
+	
+	# Make trainval datacenter folder
+	for i in trainval_indexs:
+		copyfile(os.path.join(src_anno_pathc, anno_files[i]), os.path.join(trainval_folder_path, 'annotations', anno_files[i])) 
+	
+	
+	# Make test datacenter folder
+	for i in test_indexs:
+		copyfile(os.path.join(src_anno_pathc, anno_files[i]), os.path.join(test_folder_path, 'annotations', anno_files[i]))
+
 
 def _split(folder_path, train_rates=0.8):
 	from numpy.random import permutation as perm
@@ -158,6 +175,12 @@ def _split(folder_path, train_rates=0.8):
 	files_size = len(files)
 	shuffle_idx = perm(np.arange(files_size))
 	trainval_size = int(files_size*train_rates)
-	return shuffle_idx[:trainval_size], shuffle_idx[trainval_size:]
+	return files, shuffle_idx[:trainval_size], shuffle_idx[trainval_size:]
+
+def _make_datacetner_folder(new_folder_path):
+	os.mkdir(new_folder_path)
+	os.mkdir(os.path.join(new_folder_path, "annotations"))
+	os.mkdir(os.path.join(new_folder_path, "images"))
+	return new_folder_path
 
 
