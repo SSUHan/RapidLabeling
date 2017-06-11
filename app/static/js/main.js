@@ -51,7 +51,12 @@ jQuery(document).ready(function ($) {
     var imgDir = "/static/datacenter/";
     window.params = {};
     var width = 448, height = 448;
-    var hashid = '';
+    var hashid = localStorage.getItem("hashid");
+    var username = localStorage.getItem("username");
+    if (hashid !== null)
+        _("hashid").value = hashid;
+    if (username !== null)
+        _("username").value = username;
 
     function setAnnotations(g, filename, name) {
         var ad = new Ad("rect", g);
@@ -75,6 +80,10 @@ jQuery(document).ready(function ($) {
     }
     var new_file_path = '';
     function setImage(data) {
+        if (data.status === false) {
+            alert(data.log);
+            return;
+        }
         params['filename'] = data.new_file_name;
         params['xml'] = data.new_xml_data;
         console.log(data.new_xml_data);
@@ -122,13 +131,23 @@ jQuery(document).ready(function ($) {
     }
 
     function onStart() {
-        hashid = _("token").value;
-        $.post('/start_labeling', {hashid:hashid}, setImage);
+        username = _('login-username').value;
+        if (username.length == 0) {
+            alert('please write username');
+            return;
+        }
+        hashid = _("hashid").value;
+        localStorage.setItem("hashid", hashid);
+        localStorage.setItem("username", username);
+        $.post('/start_labeling', {hashid:hashid}, setImage).then(function (data) {
+            console.log('then');
+            console.log(data);
+        });
+
     }
 
     function onReSet() {
         $('#result').empty();
-        $('<p>').text('Clear...').appendTo($('#result'));
         anno.reset();
     }
 
@@ -227,8 +246,8 @@ jQuery(document).ready(function ($) {
     function completeHandler(event) {
         var res = JSON.parse(event.target.responseText);
         hashid = res.new_hashid;
-        _("file_status").innerHTML = "Done. Token of your video is '" + hashid + "'";
-        _("token").value = hashid;
+        _("file_status").innerHTML = "Done. Hashid of your video is '" + hashid + "'";
+        _("hashid").value = hashid;
         _("progressBar").value = 0;
         onStart();
     }
@@ -266,7 +285,7 @@ jQuery(document).ready(function ($) {
             return;
         }
 
-        var username = _('login-username').value;
+        username = _('login-username').value;
         var frame_step = _('frame_step').value;
         if (username.length == 0) {
             alert('please write username');

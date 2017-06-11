@@ -136,3 +136,28 @@ Annotations Folder path : {}"\
 				self.annotations_folder_path))
 		# print("\tlabel_path_list : ", self.label_path_list)
 		print("*"*40)
+
+
+
+def split_datacenter(src_folder_path, dst_folder_path, train_rates=0.8):
+	"""
+		datacenter/
+			annotations/
+			images/
+		로 나눠져있는 데이터에 대해서 train_rates 만큼 trainval 과 test set 으로 나눠주는 기능을 담당할 것
+		src_folder_path 는 datacenter 가 올것이고
+		dst_folder_path 아래에 annotations/ 와 images/ 가 생성될 예정이다.
+		return trainval_indexs, test_indexs
+	"""
+	src_anno_path = os.path.join(src_folder_path, 'annotations')
+
+def _split(folder_path):
+	from numpy.random import permutation as perm
+	import numpy as np
+	files = [f for f in os.listdir(folder_path) if f.split('.')[-1] == 'xml' or f.split('.')[-1] == 'png']
+	files_size = len(files)
+	shuffle_idx = perm(np.arange(files_size))
+	trainval_size = int(files_size*train_rates)
+	return shuffle_idx[:trainval_size], shuffle_idx[trainval_size:]
+
+
