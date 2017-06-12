@@ -139,14 +139,15 @@ Annotations Folder path : {}"\
 
 
 
-def split_datacenter(src_folder_path, dst_folder_path, train_rates=0.8):
+def split_datacenter(src_folder_path, train_rates=0.8):
 	"""
 		datacenter/
 			annotations/
 			images/
 		로 나눠져있는 데이터에 대해서 train_rates 만큼 trainval 과 test set 으로 나눠주는 기능을 담당할 것
 		src_folder_path 는 datacenter 가 올것이고
-		dst_folder_path 아래에 annotations/ 와 images/ 가 생성될 예정이다.
+		src_folder_path + '_trainval',
+		src_folder_path + '_test' 아래에 annotations/ 와 images/ 가 생성될 예정이다.
 		return trainval_indexs, test_indexs
 	"""
 	from shutil import copyfile
@@ -155,18 +156,18 @@ def split_datacenter(src_folder_path, dst_folder_path, train_rates=0.8):
 	src_images_path = os.path.join(src_folder_path, 'images')
 	anno_files, trainval_indexs, test_indexs = _split(src_anno_pathc, train_rates)
 	
-	trainval_folder_path = _make_datacetner_folder(dst_folder_path+'_trainval')
-	test_folder_path = _make_datacetner_folder(dst_folder_path+'_test')
+	trainval_folder_path = _make_datacetner_folder(src_folder_path+'_trainval')
+	test_folder_path = _make_datacetner_folder(src_folder_path+'_test')
 	
 	# Make trainval datacenter folder
 	for i in trainval_indexs:
-		copyfile(os.path.join(src_anno_pathc, anno_files[i]), os.path.join(trainval_folder_path, 'annotations', anno_files[i])) 
-	
+		copyfile(os.path.join(src_anno_path, anno_files[i]), os.path.join(trainval_folder_path, 'annotations', anno_files[i]))
+		copyfile(os.path.join(src_images_path, anno_files[i].split('.')[0]+'.png'), os.path.join(trainval_folder_path, 'images', anno_files[i].split('.')[0]+'.png'))
 	
 	# Make test datacenter folder
 	for i in test_indexs:
 		copyfile(os.path.join(src_anno_pathc, anno_files[i]), os.path.join(test_folder_path, 'annotations', anno_files[i]))
-
+		copyfile(os.path.join(src_images_path, anno_files[i].split('.')[0]+'.png'), os.path.join(test_folder_path, 'images', anno_files[i].split('.')[0]+'.png'))
 
 def _split(folder_path, train_rates=0.8):
 	from numpy.random import permutation as perm
