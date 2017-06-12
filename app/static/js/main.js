@@ -143,6 +143,17 @@ jQuery(document).ready(function ($) {
         $.post('/start_labeling', {hashid:hashid}, setImage).then(function (data) {
             console.log('then');
             console.log(data);
+            $("#upload_form").fadeOut(function () {
+            	$("#upload_form").css("display","hidden");	
+            	$("#hashid_form").css("margin-top","30px");
+            	$("#labeling_utils").fadeIn(function () {
+            		$("#labeling_utils").css("display","initial");
+            		$("#hashid").prop("disabled",true);
+            		$("#username").prop("disabled",true);
+				});
+            })
+            
+            
         });
 
     }
