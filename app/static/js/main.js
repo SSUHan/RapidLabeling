@@ -53,6 +53,7 @@ jQuery(document).ready(function ($) {
     var width = 448, height = 448;
     var hashid = localStorage.getItem("hashid");
     var username = localStorage.getItem("username");
+
     if (hashid !== null)
         _("hashid").value = hashid;
     if (username !== null)
@@ -131,7 +132,7 @@ jQuery(document).ready(function ($) {
     }
 
     function onStart() {
-        username = _('login-username').value;
+        username = _('username').value;
         if (username.length == 0) {
             alert('please write username');
             return;
@@ -285,11 +286,11 @@ jQuery(document).ready(function ($) {
             return;
         }
 
-        username = _('login-username').value;
+        username = _('username').value;
         var frame_step = _('frame_step').value;
         if (username.length == 0) {
             alert('please write username');
-            $('#login-username').focus();
+            $('#username').focus();
             return;
         }
 
