@@ -102,7 +102,7 @@ jQuery(document).ready(function ($) {
         $('#result').empty();
         var annos = anno.getAnnotations();
         params['object'] = [];
-        params['owner'] = {name: $('#login-username').get(0).value};
+        params['owner'] = {name: $('#username').get(0).value};
         // set image size
         $('<p>').text("width:" + width + ", height:" + height).appendTo($('#result'));
         params['size'] = {"width": width, "height": height, "depth": 3};
