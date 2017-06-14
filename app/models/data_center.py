@@ -184,4 +184,16 @@ def _make_datacetner_folder(new_folder_path):
 	os.mkdir(os.path.join(new_folder_path, "images"))
 	return new_folder_path
 
+def to_zipfile(target_folder_path, zipfile_path):
+	"""
+		target_folder_path 하위에 있는 annotations 와 images 를 압축하여 파일로 만들어 리턴하도록한다.
+	"""
+	import zipfile
+	with zipfile.ZipFile(zipfile_path, 'w') as zip_fp:
+		for folder, subfolders, files in os.walk(target_folder_path):
+			for file in files:
+				if file.endswith('.xml') or file.endswith('.png'):
+					print(file)
+					zip_fp.write(os.path.join(folder, file), os.path.relpath(os.path.join(folder,file), target_folder_path), compress_type = zipfile.ZIP_DEFLATED)
+
 
