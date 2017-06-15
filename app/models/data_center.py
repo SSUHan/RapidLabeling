@@ -219,7 +219,7 @@ def _reverse_xml(target_folder_path, target_xml_name):
 	note = tree.getroot()
 	# dump(note)
 	# print("*"*20)
-	if note.findall('object') is not None:
+	if note.find('item') is None:
 		filename = note.find('filename').text
 		note.find('filename').text = 'reversed_'+filename
 		size = note.find('size')
@@ -241,24 +241,30 @@ def _reverse_xml(target_folder_path, target_xml_name):
 		# MOT -> VOC format file
 		items = note.findall('item')
 		for each_item in items:
-			if each_item.find('filename'):
+			
+			if each_item.find('filename') is not None:
 				filename = each_item.find('filename').text
 				each_item.find('filename').text = 'reversed_'+filename
 			
 			elif each_item.find('size'):
+			
 				size = each_item.find('size')
 				width = int(size.find('width').text)
 				height = int(size.find('height').text)
 
 			elif each_item.find('object'):
+				
 				for obj in each_item.findall('object'):
+					
 					if obj.find('bndbox'):
+						
 						bndbox = obj.find('bndbox')
 						xmin = int(float(bndbox.find('xmin').text))
 						xmax = int(float(bndbox.find('xmax').text))
 						bndbox.find('xmin').text = str(width - xmax)
 						bndbox.find('xmax').text = str(width - xmin)
 					else:
+					
 						xmin = int(float(obj.find('xmin').text))
 						xmax = int(float(obj.find('xmax').text))
 						obj.find('xmin').text = str(width - xmax)
