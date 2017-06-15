@@ -4,6 +4,7 @@ import os
 import glob
 from flask import url_for
 from os import sep
+from xml.etree.ElementTree import Element, SubElement, dump, parse, ElementTree
 
 class DataControllor:
 	connector = 0 # Connector in this Server
@@ -198,14 +199,70 @@ def to_zipfile(target_folder_path, zipfile_path):
 
 def reverse_data(target_folder_path):
 	import cv2
+	
 	anno_folder_path = os.path.join(target_folder_path, 'annotations')
 	image_folder_path = os.path.join(target_folder_path, 'images')
 	for file in os.listdir(image_folder_path):
 		if file.endswith('.png'):
+			print(file)
 			origin_img = cv2.imread(os.path.join(image_folder_path, file))
 			reversed_img = cv2.flip(origin_img,1)
-			# cv2.imwrite(os.path.join(image_folder_path, 'reversed_'+file), reversed_img)
+			cv2.imwrite(os.path.join(image_folder_path, 'reversed_'+file), reversed_img)
 	for file in os.listdir(anno_folder_path):
 		if file.endswith('.xml'):
-			pass
-	pass
+			print(file)
+			_reverse_xml(anno_folder_path, file)
+	
+
+def _reverse_xml(target_folder_path, target_xml_name):
+	tree = parse(os.path.join(target_folder_path, target_xml_name))
+	note = tree.getroot()
+	# dump(note)
+	# print("*"*20)
+	if note.findall('object') is not None:
+		filename = note.find('filename').text
+		note.find('filename').text = 'reversed_'+filename
+		size = note.find('size')
+		width = int(size.find('width').text)
+		height = int(size.find('height').text)
+		for obj in note.findall('object'):
+			if obj.find('bndbox'):
+				bndbox = obj.find('bndbox')
+				xmin = int(float(bndbox.find('xmin').text))
+				xmax = int(float(bndbox.find('xmax').text))
+				bndbox.find('xmin').text = str(width - xmax)
+				bndbox.find('xmax').text = str(width - xmin)
+			else:
+				xmin = int(float(obj.find('xmin').text))
+				xmax = int(float(obj.find('xmax').text))
+				obj.find('xmin').text = str(width - xmax)
+				obj.find('xmax').text = str(width - xmin)
+	else:
+		# MOT -> VOC format file
+		items = note.findall('item')
+		for each_item in items:
+			if each_item.find('filename'):
+				filename = each_item.find('filename').text
+				each_item.find('filename').text = 'reversed_'+filename
+			
+			elif each_item.find('size'):
+				size = each_item.find('size')
+				width = int(size.find('width').text)
+				height = int(size.find('height').text)
+
+			elif each_item.find('object'):
+				for obj in each_item.findall('object'):
+					if obj.find('bndbox'):
+						bndbox = obj.find('bndbox')
+						xmin = int(float(bndbox.find('xmin').text))
+						xmax = int(float(bndbox.find('xmax').text))
+						bndbox.find('xmin').text = str(width - xmax)
+						bndbox.find('xmax').text = str(width - xmin)
+					else:
+						xmin = int(float(obj.find('xmin').text))
+						xmax = int(float(obj.find('xmax').text))
+						obj.find('xmin').text = str(width - xmax)
+						obj.find('xmax').text = str(width - xmin)
+
+	# dump(note)
+	ElementTree(note).write(os.path.join(target_folder_path, 'reversed_'+target_xml_name))

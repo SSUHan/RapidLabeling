@@ -1,0 +1,18 @@
+<annotation>
+    <filename>video_217193_000100.png</filename>
+    <object>
+        <name>person</name>
+        <xmin>114.66666666666666</xmin>
+        <ymin>40.666666666666664</ymin>
+        <xmax>132</xmax>
+        <ymax>118</ymax>
+    </object>
+    <owner>
+        <name>JunsuLee</name>
+    </owner>
+    <size>
+        <width>448</width>
+        <height>448</height>
+        <depth>3</depth>
+    </size>
+</annotation>
