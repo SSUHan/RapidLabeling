@@ -140,7 +140,7 @@ Annotations Folder path : {}"\
 
 
 
-def split_datacenter(src_folder_path, train_rates=0.8):
+def split_datacenter(src_folder_path, train_rates=0.9):
 	"""
 		datacenter/
 			annotations/
@@ -155,19 +155,21 @@ def split_datacenter(src_folder_path, train_rates=0.8):
 	
 	src_anno_path = os.path.join(src_folder_path, 'annotations')
 	src_images_path = os.path.join(src_folder_path, 'images')
-	anno_files, trainval_indexs, test_indexs = _split(src_anno_pathc, train_rates)
+	anno_files, trainval_indexs, test_indexs = _split(src_anno_path, train_rates)
 	
-	trainval_folder_path = _make_datacetner_folder(src_folder_path+'_trainval')
-	test_folder_path = _make_datacetner_folder(src_folder_path+'_test')
+	trainval_folder_path = _make_datacetner_folder(os.path.join(src_folder_path, 'trainval'))
+	test_folder_path = _make_datacetner_folder(os.path.join(src_folder_path, 'test'))
 	
 	# Make trainval datacenter folder
 	for i in trainval_indexs:
+		print("trainval : ", i)
 		copyfile(os.path.join(src_anno_path, anno_files[i]), os.path.join(trainval_folder_path, 'annotations', anno_files[i]))
 		copyfile(os.path.join(src_images_path, anno_files[i].split('.')[0]+'.png'), os.path.join(trainval_folder_path, 'images', anno_files[i].split('.')[0]+'.png'))
 	
 	# Make test datacenter folder
 	for i in test_indexs:
-		copyfile(os.path.join(src_anno_pathc, anno_files[i]), os.path.join(test_folder_path, 'annotations', anno_files[i]))
+		print("test : ", i)
+		copyfile(os.path.join(src_anno_path, anno_files[i]), os.path.join(test_folder_path, 'annotations', anno_files[i]))
 		copyfile(os.path.join(src_images_path, anno_files[i].split('.')[0]+'.png'), os.path.join(test_folder_path, 'images', anno_files[i].split('.')[0]+'.png'))
 
 def _split(folder_path, train_rates=0.8):
