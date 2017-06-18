@@ -157,8 +157,10 @@ def split_datacenter(src_folder_path, train_rates=0.9):
 	src_images_path = os.path.join(src_folder_path, 'images')
 	anno_files, trainval_indexs, test_indexs = _split(src_anno_path, train_rates)
 	
-	trainval_folder_path = _make_datacetner_folder(os.path.join(src_folder_path, 'trainval'))
-	test_folder_path = _make_datacetner_folder(os.path.join(src_folder_path, 'test'))
+	if not os.path.exists(os.path.join(src_folder_path, 'trainval')):
+		trainval_folder_path = _make_datacetner_folder(os.path.join(src_folder_path, 'trainval'))
+	if not os.path.exists(os.path.join(src_folder_path, 'test')):
+		test_folder_path = _make_datacetner_folder(os.path.join(src_folder_path, 'test'))
 	
 	# Make trainval datacenter folder
 	for i in trainval_indexs:
