@@ -7,9 +7,10 @@ from app.models.video_manager import parse_video
 def index_page():
 	# image_path = 'app/datacenter/images/dog.jpg'
 	# image_path = os.path.join(rc_app.root_path, 'datacenter', 'images', 'dog.jpg')
-	image_path = url_for('static', filename='datacenter/images/dog.jpg')
+	# image_path = url_for('static', filename='datacenter/images/dog.jpg')
+	image_path = url_for('static', filename='image/rapidlabeling.png')
 	
-	return render_template('index.html', image_path=image_path)
+	return render_template('lending.html', image_path=image_path)
 
 @rc_app.route('/make_dir', methods=['POST'])
 def make_dir():
